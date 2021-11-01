@@ -1,0 +1,12 @@
+//
+//  WalletCoreError.swift
+//  
+//
+//  Created by Ronald Mannak on 10/31/21.
+//
+
+import Foundation
+
+enum WalletCoreError: Error {
+    case unexpectedResponse(String)
+}

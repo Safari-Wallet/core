@@ -8,4 +8,9 @@ final class SafariWalletCoreTests: XCTestCase {
         // results.
         XCTAssertEqual(SafariWalletCore().text, "Hello, World!")
     }
+    
+    func testWei() {
+        let wei = Wei("2134", radix: 16)
+        
+    }
 }
