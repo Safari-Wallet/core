@@ -13,4 +13,5 @@ enum WalletCoreError: Error {
     case invalidMethod
     case noParameters
     case unknownMethod(String)
+    case addressGenerationError
 }
