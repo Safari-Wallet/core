@@ -1,5 +1,5 @@
 //
-//  EthereumBlock.swift
+//  Block.swift
 //  web3swift
 //
 //  Created by Matt Marshall on 20/03/2018.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum EthereumBlock: Hashable {
+public enum Block: Hashable {
     case latest
     case earliest
     case pending
@@ -53,11 +53,11 @@ public enum EthereumBlock: Hashable {
     }
 }
 
-extension EthereumBlock: Codable {
+extension Block: Codable {
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer()
         let strValue = try value.decode(String.self)
-        self = EthereumBlock(rawValue: strValue)
+        self = Block(rawValue: strValue)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -66,12 +66,12 @@ extension EthereumBlock: Codable {
     }
 }
 
-extension EthereumBlock: Comparable {
-    static public func == (lhs: EthereumBlock, rhs: EthereumBlock) -> Bool {
+extension Block: Comparable {
+    static public func == (lhs: Block, rhs: Block) -> Bool {
         return lhs.stringValue == rhs.stringValue
     }
     
-    static public func < (lhs: EthereumBlock, rhs: EthereumBlock) -> Bool {
+    static public func < (lhs: Block, rhs: Block) -> Bool {
         switch lhs {
         case .earliest:
             return false

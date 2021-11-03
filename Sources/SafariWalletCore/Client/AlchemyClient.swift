@@ -34,7 +34,7 @@ extension AlchemyClient {
     ///   - maxCount: max number of results to return per call. optional (default 1000)
     ///   - pageKey: for pagination. optional
     /// - Returns: Returns an array of asset transfers based on the specified paramaters.
-    public func alchemyAssetTransfers(fromBlock: EthereumBlock = .earliest, toBlock: EthereumBlock = .latest, fromAddress: Address? = nil, toAddress: Address? = nil, contractAddresses: [Address]? = nil, transferCategory: AlchemyAssetTransferCategory = .all, excludeZeroValue: Bool = true, maxCount: Int? = nil, pageKey: Int? = nil) async throws -> [AlchemyAssetTransfer] {
+    public func alchemyAssetTransfers(fromBlock: Block = .earliest, toBlock: Block = .latest, fromAddress: Address? = nil, toAddress: Address? = nil, contractAddresses: [Address]? = nil, transferCategory: AlchemyAssetTransferCategory = .all, excludeZeroValue: Bool = true, maxCount: Int? = nil, pageKey: Int? = nil) async throws -> [AlchemyAssetTransfer] {
         
         enum TransferCategory: String, Encodable {
             case external = "external"
@@ -43,8 +43,8 @@ extension AlchemyClient {
         }
         
         struct CallParams: Encodable {
-            let fromBlock: EthereumBlock? // in hex string or "latest". optional (default to latest)
-            let toBlock: EthereumBlock? //in hex string or "latest". optional (default to latest)
+            let fromBlock: Block? // in hex string or "latest". optional (default to latest)
+            let toBlock: Block? //in hex string or "latest". optional (default to latest)
             let fromAddress: Address? // in hex string. optional
             let toAddress: Address? // in hex string. optional.
             let contractAddresses: [Address]? // list of hex strings. optional.

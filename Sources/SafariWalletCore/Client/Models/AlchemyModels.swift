@@ -79,7 +79,7 @@ public struct AlchemyRawContract: Codable {
 }
 
 public struct AlchemyAssetTransfer: Codable {
-    let blockNum: EthereumBlock
+    let blockNum: Block
     let hash: String
     let from: Address
     let to: Address
@@ -95,7 +95,7 @@ public struct AlchemyAssetTransfers: Codable {
 }
 
 public struct FeeHistoryResponse: Codable {
-    let oldestBlock: EthereumBlock
+    let oldestBlock: Block
     let reward: [[String]] //[BigUInt]
     let baseFeePerGas: [String] //[BigUInt]
     let gasUsedRatio: [Float]

@@ -9,4 +9,8 @@ import Foundation
 
 enum WalletCoreError: Error {
     case unexpectedResponse(String)
+    case noMethod
+    case invalidMethod
+    case noParameters
+    case unknownMethod(String)
 }

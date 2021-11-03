@@ -14,7 +14,7 @@ struct Log: Equatable, Decodable {
     public let transactionIndex: BigUInt?
     public let transactionHash: String?
     public let blockHash: String?
-    public let blockNumber: EthereumBlock
+    public let blockNumber: Block
     public let address: Address
     public var data: String
     public var topics: [String]

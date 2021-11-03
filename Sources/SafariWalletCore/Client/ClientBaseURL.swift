@@ -13,7 +13,7 @@ public enum ClientBaseURL {
     case alchemy(key: String)
     case custom(baseURL: URL)
     
-    func baseURL(for network: Network) -> URL? {
+    public func baseURL(for network: Network) -> URL? {
         
         switch self {
         case .infura(key: let key):
