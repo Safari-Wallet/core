@@ -18,7 +18,7 @@ public class Client {
     let network: Network
     let monitor = NWPathMonitor()
     
-    public init?(network: Network = .ethereum, baseURL: ClientBaseURL) {
+    public init?(network: Network = .ethereum, baseURL: NodeProvider) {
         guard let baseURL = baseURL.baseURL(for: network) else { return nil }
         self.jsonRpcClient = JsonRpcClient(url: baseURL)
         self.network = network
@@ -29,11 +29,11 @@ public class Client {
     deinit {
         self.monitor.cancel()
     }
+   
 }
 
 // MARK: - Web3 API
 extension Client {
-    
     
     /*
      curl https://eth-mainnet.alchemyapi.io/v2/your-api-key \
@@ -60,4 +60,5 @@ extension Client {
         guard let balance = BigUInt(result.stripHexPrefix(), radix: 16) else { throw WalletCoreError.unexpectedResponse(result) }
         return balance
     }
+   
 }
