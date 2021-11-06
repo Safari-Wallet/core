@@ -103,7 +103,7 @@ extension AlchemyClient {
     /// - Returns: Az BigInt, which is the maxPriorityFeePerGas suggestion. You can plug this directly into your transaction field.
     public func maxPriorityFeePerGas() async throws -> Wei {
         let gasHex = try await jsonRpcClient.makeRequest(method: "eth_maxPriorityFeePerGas", resultType: String.self)
-        guard let gas = Wei(hex: gasHex) else {
+        guard let gas = Wei(hexString: gasHex) else {
             throw WalletCoreError.unexpectedResponse(gasHex)
         }
         return gas
@@ -126,7 +126,7 @@ extension AlchemyClient {
             "spender": spender.address
         ]
         let response = try await jsonRpcClient.makeRequest(method: "alchemy_getTokenAllowance", params: [params], resultType: String.self)
-        guard let allowance = Wei(response, radix: 10) else {
+        guard let allowance = Wei(string: response) else {
             throw WalletCoreError.unexpectedResponse(response)
         }
         return allowance
