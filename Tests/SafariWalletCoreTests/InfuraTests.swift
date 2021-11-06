@@ -12,15 +12,15 @@ import BigInt
 
 class InfuraTests: XCTestCase {
 
-    var ropstenClient: Client!
-    var mainnetClient: Client!
+    var ropstenClient: BaseClient!
+    var mainnetClient: BaseClient!
     let uniswapTokenContract = Address(address: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984")
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         super.setUp()
-        self.ropstenClient = Client(network: .ropsten, baseURL: .infura(key: "<INFURA ROPSTEN KEY HERE>"))
-        self.mainnetClient = Client(network: .ethereum, baseURL: .infura(key: "<INFURA MAINNET KEY HERE"))
+        self.ropstenClient = BaseClient(network: .ropsten, baseURL: .infura(key: "<INFURA ROPSTEN KEY HERE>"))
+        self.mainnetClient = BaseClient(network: .ethereum, baseURL: .infura(key: "<INFURA MAINNET KEY HERE"))
     }
 
     override func tearDownWithError() throws {
