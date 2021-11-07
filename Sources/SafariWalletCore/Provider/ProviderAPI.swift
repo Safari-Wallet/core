@@ -8,13 +8,14 @@
 import Foundation
 
 // Implementation of https://docs.metamask.io/guide/ethereum-provider.html and https://docs.metamask.io/guide/rpc-api.html
-struct ProviderAPI {
+public struct ProviderAPI {
+    
+    public let delegate: SafariWalletCoreDelegate
     
     func parseCall(call: [String: Any]) async throws -> Any {
         
         guard let method = call["method"] as? String else { throw WalletCoreError.noMethod }
         let params = call["params"]
-        guard let delegate = SafariWalletCore.shared.delegate else { throw WalletCoreError.noCoreDelegate }
         guard let client = delegate.client() else { throw WalletCoreError.noClient }
         
         switch method {
