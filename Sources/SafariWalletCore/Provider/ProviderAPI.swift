@@ -14,8 +14,8 @@ struct ProviderAPI {
         
         guard let method = call["method"] as? String else { throw WalletCoreError.noMethod }
         let params = call["params"]
-        guard let client = SafariWalletCore.shared.client else { throw WalletCoreError.noClient }
         guard let delegate = SafariWalletCore.shared.delegate else { throw WalletCoreError.noCoreDelegate }
+        let client = delegate.client()
         
         switch method {
             
