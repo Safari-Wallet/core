@@ -9,7 +9,7 @@ import Foundation
 
 public enum Covalent {
     
-    public struct CovalentResponse<D: Codable>: Codable {
+    public struct Response<D: Codable>: Codable {
         let data: D
         let error: Bool
         let error_message: String?
