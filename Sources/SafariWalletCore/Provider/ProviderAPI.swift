@@ -62,6 +62,8 @@ public struct ProviderAPI {
             
         // MARK: - JSONRPC API
         case "eth_accounts", "eth_requestAccounts":
+            return ["0xb60e8dd61c5d32be8058bb8eb970870f07233155"]
+            
             if let address = delegate.addresses()?.first {
                 logger.critical("Safari-wallet SafariWebExtensionHandler: fetching accounts: \(address)")
             } else {
@@ -77,6 +79,7 @@ public struct ProviderAPI {
 
         case "eth_getBalance":
             // https://eth.wiki/json-rpc/API#eth_getbalance
+            return "0x0234c8a3397aab58"
             guard let params = params as? [String], params.count == 2 else {
                 throw WalletCoreError.invalidParams
             }
