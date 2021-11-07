@@ -6,7 +6,7 @@ final class SafariWalletCoreTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SafariWalletCore().text, "Hello, World!")
+//        XCTAssertEqual(SafariWalletCore().text, "Hello, World!")
     }
     
 //    func testWei() {

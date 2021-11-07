@@ -51,7 +51,7 @@ extension Wei {
         self.value = value
     }
     
-    public init?(string: String) {
+    public init?(_ string: String) {
         guard let value = BigInt(string, radix: 10) else { return nil }
         self.value = value
     }
@@ -101,6 +101,12 @@ extension Wei: Codable {
 extension Wei: Equatable {
     public static func ==(lhs: Wei, rhs: Wei) -> Bool {
         return lhs.value == rhs.value
+    }
+}
+
+extension Wei: Comparable {
+    public static func <(lhs: Wei, rhs: Wei) -> Bool {
+        return lhs.value < rhs.value
     }
 }
 

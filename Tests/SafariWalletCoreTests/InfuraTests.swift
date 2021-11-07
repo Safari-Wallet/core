@@ -41,7 +41,7 @@ class InfuraTests: XCTestCase {
     
     func testBalance() async throws {
         let balance = try await mainnetClient.ethGetBalance(address: "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B", blockNumber: .latest)
-        XCTAssertGreaterThan(balance, BigUInt(0))
+        XCTAssertGreaterThan(balance, Wei(0))
     }
     
     func testBlockHeight() async throws {

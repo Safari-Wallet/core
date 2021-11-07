@@ -110,7 +110,7 @@ extension AlchemyClient {
             "spender": spender.address
         ]
         let response = try await jsonRpcClient.makeRequest(method: "alchemy_getTokenAllowance", params: [params], resultType: String.self)
-        guard let allowance = Wei(string: response) else {
+        guard let allowance = Wei(response) else {
             throw WalletCoreError.unexpectedResponse(response)
         }
         return allowance
