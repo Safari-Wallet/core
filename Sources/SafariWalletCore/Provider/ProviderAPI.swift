@@ -15,12 +15,12 @@ struct ProviderAPI {
         guard let method = call["method"] as? String else { throw WalletCoreError.noMethod }
         let params = call["params"]
         guard let delegate = SafariWalletCore.shared.delegate else { throw WalletCoreError.noCoreDelegate }
-        let client = delegate.client()
+        guard let client = delegate.client() else { throw WalletCoreError.noClient }
         
         switch method {
             
         // MARK: - Provider API
-            
+        /*
         case "maxRetries":
             // https://docs.alchemy.com/alchemy/documentation/alchemy-web3#maxretries
             guard let amount = params as? Int else {
@@ -44,6 +44,7 @@ struct ProviderAPI {
             }
             client.retryJitter = amount
             return []
+         */
             
         case "isConnected":
             return client.isConnected
@@ -54,7 +55,7 @@ struct ProviderAPI {
         // MARK: - JSONRPC API
         case "eth_accounts":
             // https://eth.wiki/json-rpc/API#eth_accounts
-            return [delegate.defaultAddress().address]
+            return delegate.addresses() ?? []
             
         case "eth_call":
             // https://eth.wiki/json-rpc/API#eth_call
