@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WalletCoreError: Error {
+public enum WalletCoreError: Error {
     case unexpectedResponse(String)
     case noMethod
     case invalidMethod
