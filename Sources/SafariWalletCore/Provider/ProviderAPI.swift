@@ -56,7 +56,7 @@ public struct ProviderAPI {
             throw WalletCoreError.notImplemented
             
         // MARK: - JSONRPC API
-        case "eth_accounts":
+        case "eth_accounts", "eth_requestAccounts":
             // https://eth.wiki/json-rpc/API#eth_accounts
             return delegate.addresses() ?? []
             
