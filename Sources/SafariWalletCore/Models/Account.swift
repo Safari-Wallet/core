@@ -10,9 +10,9 @@ import MEWwalletKit
 
 public struct Account {
     
-    let addresss: Address
-    let publicKey: PublicKeyEth1
-    let privateKey: PrivateKeyEth1
+    public let addresss: Address
+    public let publicKey: PublicKeyEth1
+    public let privateKey: PrivateKeyEth1
     
     public func sign(message: Data) -> Data {
         return Data()
