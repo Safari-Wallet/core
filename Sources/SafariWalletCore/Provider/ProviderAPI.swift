@@ -12,6 +12,10 @@ public struct ProviderAPI {
     
     public let delegate: SafariWalletCoreDelegate
     
+    public init(delegate: SafariWalletCoreDelegate) {
+        self.delegate = delegate
+    }
+    
     func parseCall(call: [String: Any]) async throws -> Any {
         
         guard let method = call["method"] as? String else { throw WalletCoreError.noMethod }
