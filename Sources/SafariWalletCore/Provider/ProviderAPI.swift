@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import os.log
 
 // Implementation of https://docs.metamask.io/guide/ethereum-provider.html and https://docs.metamask.io/guide/rpc-api.html
 public struct ProviderAPI {
     
     public let delegate: SafariWalletCoreDelegate
+    let logger = Logger()
     
     public init(delegate: SafariWalletCoreDelegate) {
         self.delegate = delegate
@@ -18,7 +20,10 @@ public struct ProviderAPI {
     
     public func parseMessage(method: String, params: Any?) async throws -> Any {
 
-        guard let client = delegate.client() else { throw WalletCoreError.noClient }
+        guard let client = delegate.client() else {
+            logger.critical("Safari-wallet SafariWebExtensionHandler: No delegate client")
+            throw WalletCoreError.noClient
+        }
         
         switch method {
             
@@ -57,6 +62,12 @@ public struct ProviderAPI {
             
         // MARK: - JSONRPC API
         case "eth_accounts", "eth_requestAccounts":
+            if let address = delegate.addresses()?.first {
+                logger.critical("Safari-wallet SafariWebExtensionHandler: fetching accounts: \(address)")
+            } else {
+                logger.critical("Safari-wallet SafariWebExtensionHandler: adresses returned nil")
+            }
+            
             // https://eth.wiki/json-rpc/API#eth_accounts
             return delegate.addresses() ?? []
             
