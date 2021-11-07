@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MEWwalletKit
 
 public enum Covalent {
     
@@ -52,15 +53,15 @@ public enum Covalent {
         public let tx_hash: String
         public let tx_offset: Int?
         public let successful: Bool?
-        public let from_address: String?
+        public let from_address: Address?
         public let from_address_label: String?
-        public let to_address: String?
+        public let to_address: Address?
         public let to_address_label: String?
         public let value: String?
         public let value_quote: Double?
-        public let gas_offered: Double?
-        public let gas_spent: Double?
-        public let gas_price: Double?
+        public let gas_offered: Int?
+        public let gas_spent: Int?
+        public let gas_price: Int?
         public let gas_quote: Double?
         public let gas_quote_rate: Double?
         public let log_events: [LogEvent]
