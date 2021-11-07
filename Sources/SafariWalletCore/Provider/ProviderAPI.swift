@@ -23,7 +23,7 @@ struct ProviderAPI {
             
         case "maxRetries":
             // https://docs.alchemy.com/alchemy/documentation/alchemy-web3#maxretries
-            guard let params = params, params.count == 1, let amount = Int(params[0]) else {
+            guard let amount = params as? Int else {
                 return client.maxRetries
             }
             client.maxRetries = amount
@@ -31,7 +31,7 @@ struct ProviderAPI {
             
         case "retryInterval":
             // https://docs.alchemy.com/alchemy/documentation/alchemy-web3#retryinterval
-            guard let params = params, params.count == 1, let amount = Int(params[0]) else {
+            guard let amount = params as? Int else {
                 return client.retryInterval
             }
             client.retryInterval = amount
@@ -39,7 +39,7 @@ struct ProviderAPI {
         
         case "retryJitter":
             // https://docs.alchemy.com/alchemy/documentation/alchemy-web3#retryjitter
-            guard let params = params, params.count == 1, let amount = Int(params[0]) else {
+            guard let amount = params as? Int else {
                 return client.retryJitter
             }
             client.retryJitter = amount
