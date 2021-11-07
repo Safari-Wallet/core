@@ -9,11 +9,29 @@ import Foundation
 
 public enum Covalent {
     
+    public struct CovalentResponse<D: Codable>: Codable {
+        let data: D
+        let error: Bool
+        let error_message: String?
+        let error_code: Int?
+    }
+    
+    public struct GetTransactionsResponseData: Codable {
+        let address: String
+        let updated_at: String
+        let next_update_at: String
+        let quote_currency: String
+        let chain_id: Int
+        let items: [Transaction]
+    }
+    
     public struct Transaction: Codable, Hashable, Identifiable {
-        public var id = UUID()
-        public var block_signed_at: Date?
+        public var id: String {
+            return tx_hash
+        }
+        public var block_signed_at: String?
         public var block_height: Int?
-        public var tx_hash: String?
+        public var tx_hash: String
         public var tx_offset: Int?
         public var successful: Bool?
         public var from_address: String?
@@ -28,6 +46,8 @@ public enum Covalent {
         public var gas_quote: Double?
         public var gas_quote_rate: Double?
         // TODO - implement logEvents array
+        
+        
     }
     
 }
