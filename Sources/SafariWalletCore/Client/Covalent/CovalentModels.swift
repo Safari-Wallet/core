@@ -29,26 +29,42 @@ public enum Covalent {
         let items: [Transaction]
     }
     
-    public struct Transaction: Codable, Hashable, Identifiable {
+    public struct LogEvent: Codable {
+        public let block_signed_at: Date
+        public let block_height: Int
+        public let tx_offset: Int
+        public let log_offset: Int
+        public let tx_hash: String
+    }
+    
+    public struct Transaction: Codable, Identifiable {
+        
+        public static func == (lhs: Covalent.Transaction, rhs: Covalent.Transaction) -> Bool {
+            return lhs.id == rhs.id
+        }
+        
         public var id: String {
             return tx_hash
         }
-        public var block_signed_at: Date
-        public var block_height: Int?
-        public var tx_hash: String
-        public var tx_offset: Int?
-        public var successful: Bool?
-        public var from_address: String?
-        public var from_address_label: String?
-        public var to_address: String?
-        public var to_address_label: String?
-        public var value: String?
-        public var value_quote: Double?
-        public var gas_offered: Double?
-        public var gas_spent: Double?
-        public var gas_price: Double?
-        public var gas_quote: Double?
-        public var gas_quote_rate: Double?
+        
+        public let block_signed_at: Date
+        public let block_height: Int?
+        public let tx_hash: String
+        public let tx_offset: Int?
+        public let successful: Bool?
+        public let from_address: String?
+        public let from_address_label: String?
+        public let to_address: String?
+        public let to_address_label: String?
+        public let value: String?
+        public let value_quote: Double?
+        public let gas_offered: Double?
+        public let gas_spent: Double?
+        public let gas_price: Double?
+        public let gas_quote: Double?
+        public let gas_quote_rate: Double?
+        public let log_events: [LogEvent]
+        
     }
     
 }
