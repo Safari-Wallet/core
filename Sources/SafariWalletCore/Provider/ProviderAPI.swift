@@ -16,7 +16,7 @@ public struct ProviderAPI {
         self.delegate = delegate
     }
     
-    func parseMessage(method: String, params: Any?) async throws -> Any {
+    public func parseMessage(method: String, params: Any?) async throws -> Any {
 
         guard let client = delegate.client() else { throw WalletCoreError.noClient }
         
