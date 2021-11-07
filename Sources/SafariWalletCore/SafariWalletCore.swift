@@ -5,10 +5,20 @@
 //  Created by Ronald Mannak on 10/30/21.
 //
 
-public struct SafariWalletCore {
-    
-    public private(set) var text = "Hello, World!"
+import MEWwalletKit
 
-    public init() {
-    }
+public protocol SafariWalletCoreDelegate {
+    func addresses() -> [String]?
+//    func account(account: String) -> Account?
+    func client() -> Client?
+    func network() -> Network
+}
+
+public class SafariWalletCore {
+    
+//    public static let shared = SafariWalletCore()
+//
+//    public var delegate: SafariWalletCoreDelegate? = nil
+//
+//    private init() { }
 }
