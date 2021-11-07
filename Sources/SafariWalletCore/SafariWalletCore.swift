@@ -16,7 +16,7 @@ public protocol SafariWalletCoreDelegate {
 
 public class SafariWalletCore {
     
-    static let shared = SafariWalletCore()
+    public static let shared = SafariWalletCore()
     
     private (set) var delegate: SafariWalletCoreDelegate? = nil
     private (set) var client: Client? = nil
