@@ -34,7 +34,9 @@ public final class CovalentClient {
         )
         
         return try await withCheckedThrowingContinuation({ continuation in
-            req.responseDecodable(of: Covalent.CovalentResponse<Covalent.GetTransactionsResponseData>.self) { dataResponse in
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            req.responseDecodable(of: Covalent.CovalentResponse<Covalent.GetTransactionsResponseData>.self, decoder: decoder) { dataResponse in
                 switch dataResponse.result {
                     case .success(let transactionResponse):
                         return continuation.resume(with: .success(transactionResponse.data.items))
