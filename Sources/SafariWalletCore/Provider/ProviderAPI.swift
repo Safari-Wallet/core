@@ -61,7 +61,7 @@ public struct ProviderAPI {
             throw WalletCoreError.notImplemented
             
         // MARK: - JSONRPC API
-        case "eth_accounts", "eth_requestAccounts":
+        case "eth_accounts", "eth_requestAccounts", "eth_getAccounts":
             return ["0xb60e8dd61c5d32be8058bb8eb970870f07233155"]
             
             if let address = delegate.addresses()?.first {
