@@ -10,10 +10,10 @@ import MEWwalletKit
 import BigInt
 
 // https://dashboard.alchemyapi.io/composer
-public final class AlchemyClient: Client {
+public final class AlchemyClient: BaseClient {
         
     public init?(network: Network = .ethereum, key: String) {
-        super.init(network: network, baseURL: .alchemy(key: key))
+        super.init(network: network, provider: .alchemy(key: key))
     }
 }
 
@@ -34,12 +34,20 @@ extension AlchemyClient {
     ///   - maxCount: max number of results to return per call. optional (default 1000)
     ///   - pageKey: for pagination. optional
     /// - Returns: Returns an array of asset transfers based on the specified paramaters.
-    public func alchemyAssetTransfers(fromBlock: Block = .earliest, toBlock: Block = .latest, fromAddress: Address? = nil, toAddress: Address? = nil, contractAddresses: [Address]? = nil, transferCategory: AlchemyAssetTransferCategory = .all, excludeZeroValue: Bool = true, maxCount: Int? = nil, pageKey: Int? = nil) async throws -> [AlchemyAssetTransfer] {
+    public func alchemyAssetTransfers(fromBlock: Block = .earliest,
+                                      toBlock: Block = .latest,
+                                      fromAddress: Address? = nil,
+                                      toAddress: Address? = nil,
+                                      contractAddresses: [Address]? = nil,
+                                      transferCategory: AlchemyAssetTransferCategory = .all,
+                                      excludeZeroValue: Bool = true,
+                                      maxCount: Int? = nil,
+                                      pageKey: Int? = nil) async throws -> [AlchemyAssetTransfer] {
         
         enum TransferCategory: String, Encodable {
-            case external = "external"
-            case internalCategory = "internal"
-            case token = "token"
+            case external
+            case `internal`
+            case token
         }
         
         struct CallParams: Encodable {
@@ -50,11 +58,19 @@ extension AlchemyClient {
             let contractAddresses: [Address]? // list of hex strings. optional.
             let category: String? // list of any combination of external, token. optional, if blank, would include both.
             let excludeZeroValue: Bool // aBoolean . optional (default true)
-            let maxCount: Int? // max number of results to return per call. optional (default 1000)
-            let pageKey: Int? // for pagination. optional
+            let maxCount: String? // max number of results to return per call. optional (default 1000)
+            let pageKey: String? // for pagination. optional
         }
         
-        let params = CallParams(fromBlock: fromBlock, toBlock: toBlock, fromAddress: fromAddress, toAddress: toAddress, contractAddresses: contractAddresses, category: (transferCategory == .all ? nil : transferCategory.rawValue), excludeZeroValue: excludeZeroValue, maxCount: maxCount, pageKey: pageKey)
+       let params = CallParams(fromBlock: fromBlock,
+                                toBlock: toBlock,
+                                fromAddress: fromAddress,
+                                toAddress: toAddress,
+                                contractAddresses: contractAddresses,
+                                category: (transferCategory == .all ? nil : transferCategory.rawValue),
+                                excludeZeroValue: excludeZeroValue,
+                               maxCount: maxCount?.hexString,
+                               pageKey: pageKey?.hexString)
         let response = try await jsonRpcClient.makeRequest(method: "alchemy_getAssetTransfers", params: [params], resultType: AlchemyAssetTransfers.self)
         return response.transfers
     }
@@ -115,4 +131,5 @@ extension AlchemyClient {
         }
         return allowance
     }
+   
 }
