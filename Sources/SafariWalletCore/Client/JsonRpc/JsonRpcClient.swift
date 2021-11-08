@@ -38,7 +38,6 @@ public struct JsonRpcClient {
       
         let (data, _) = try await urlSession.data(for: urlRequest, delegate: nil)
         let jsonRpcResponse = try JSONDecoder().decode(JsonRpcResponse<R>.self, from: data)
-
         if let result = jsonRpcResponse.result {
             return result
         } else if let rpcError = jsonRpcResponse.error {
