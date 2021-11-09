@@ -24,20 +24,20 @@ public struct JsonRpcClient {
                                                         resultType: R.Type,
                                                         urlSession: WalletURLSession = URLSession.shared)  async throws -> R {
       
-        var urlRequest = URLRequest(url: url,
-                                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
-
-        let rpcRequest = JsonRpcRequest<P>(method: method, params: params)
-        guard let body = try? JSONEncoder().encode(rpcRequest) else {
-            throw NetworkError.encodingError
-        }
-        urlRequest.httpBody = body
-
-        let (data, _) = try await urlSession.data(for: urlRequest, delegate: nil)
-//        let data = try await makeRequest(method: method, params: params, urlSession: urlSession)
+//        var urlRequest = URLRequest(url: url,
+//                                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+//        urlRequest.httpMethod = "POST"
+//        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+//
+//        let rpcRequest = JsonRpcRequest<P>(method: method, params: params)
+//        guard let body = try? JSONEncoder().encode(rpcRequest) else {
+//            throw NetworkError.encodingError
+//        }
+//        urlRequest.httpBody = body
+//
+//        let (data, _) = try await urlSession.data(for: urlRequest, delegate: nil)
+        let data = try await makeRequest(method: method, params: params, urlSession: urlSession)
         let jsonRpcResponse = try JSONDecoder().decode(JsonRpcResponse<R>.self, from: data)
         if let result = jsonRpcResponse.result {
             return result
@@ -48,7 +48,7 @@ public struct JsonRpcClient {
         }
     }
     
-    func makeRequest<P: Encodable>(method: String,
+    public func makeRequest<P: Encodable>(method: String,
                                    params: P,
                                    urlSession: WalletURLSession = URLSession.shared) async throws -> Data {
         var urlRequest = URLRequest(url: url,
@@ -66,7 +66,6 @@ public struct JsonRpcClient {
         return try await urlSession.data(for: urlRequest, delegate: nil).0
     }
     
-    // FIXME: Quick hack to pass literal dictionary parameters from the Safari extension to Alchemy
 //    func makeRequest(method: String, dictParams: Any, urlSession: WalletURLSession = URLSession.shared) async throws -> Data {
 //        var urlRequest = URLRequest(url: url,
 //                                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
