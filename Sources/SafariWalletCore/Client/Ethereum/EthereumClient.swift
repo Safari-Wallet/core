@@ -44,8 +44,19 @@ public class EthereumClient: BaseClient {
     /// https://eth.wiki/json-rpc/API#eth_call
     /// - Parameter params: <#params description#>
     /// - Returns: <#description#>
-    public func ethCall(method: String, params: Any) async throws -> Any {
-        return try await jsonRpcClient.makeRequest(method: method, dictParams: params)
+    public func ethCall(params: Call, blockNumber: Block = .latest) async throws -> Any {
+        return Data()
+//        let params: [Codable] = [params, blockNumber]
+//        let result = jsonRpcClient.makeRequest(method: "eth_call", params: params, resultType: ???)
+//        return result
+//        
+//        /* Return types:
+//         Int
+//         String
+//         Dictionary (object in JavaScript)
+//         Tuple of the above
+//         Array of the above
+//         */
     }
    
 }

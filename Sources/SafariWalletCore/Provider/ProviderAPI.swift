@@ -73,7 +73,8 @@ public struct ProviderAPI {
             
         case "eth_call":
             // https://eth.wiki/json-rpc/API#eth_call
-            return try await client.ethCall(method: method, params: params ?? [])
+//            return try await client.ethCall(params: params ?? [])
+            return ""
 
         case "eth_getBalance":
             // https://eth.wiki/json-rpc/API#eth_getbalance
