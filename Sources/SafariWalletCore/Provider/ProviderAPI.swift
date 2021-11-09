@@ -70,11 +70,44 @@ public struct ProviderAPI {
             
             // https://eth.wiki/json-rpc/API#eth_accounts
             return delegate.addresses() ?? []
+                        
+            
+        // Uncomment one of the eth_call cases to test
             
         case "eth_call":
+            // V1. This version expects a complete JSON-RPC object to be passed as the params value, like: {"jsonrpc":"2.0","method":"eth_call","params":[<call>, "latest"],"id":1}
+            // Returns mock Data
+            guard let params = params  else { throw WalletCoreError.noParameters }
+            let data = try JSONSerialization.data(withJSONObject: params)
+            return try await client.ethCallMock(data: data)
+        
+//        case "eth_call":
+//            // V2. Same as above, but returns real data from Alchemy (account needs to be funded to call!)
+//            guard let params, let data = try JSONSerialization.data(withJSONObject: params) = params else { throw WalletCoreError.noParameters }
+//            return try await client.ethCall(data: data)
+            
+//        case "eth_call":
+//            // V3. Same as V1 but returns a string
+//            guard let params, let data = try JSONSerialization.data(withJSONObject: params) = params else { throw WalletCoreError.noParameters }
+//            let result = try await client.ethCallMock(data: data)
+//            return String(data: result, encoding: .utf8) ?? "Error encoding result"
+            
+        /* Ignore this code.
+            // This version expects ...
             // https://eth.wiki/json-rpc/API#eth_call
+            guard let params, let data = try JSONSerialization.data(withJSONObject: params) = params else { throw WalletCoreError.noParameters }
+            
+            
+            guard let params = params as? [Any], params.count == 2, let callDict = params[0] as? [String: Any], let blockString = params[1] as? String else { throw WalletCoreError.invalidParams}
+
+            let callData = try JSONSerialization.data(withJSONObject: callDict)
+            let call = JSONEncoder().encode(<#T##value: Encodable##Encodable#>)
+            let block = Block(rawValue: blockString)
+            
+            let call = Call(from: <#T##Address?#>, to: <#T##Address#>, gas: <#T##Int?#>, gasPrice: <#T##Wei?#>, value: <#T##Wei?#>, data: <#T##String?#>)
+            
 //            return try await client.ethCall(params: params ?? [])
-            return ""
+            return "" */
 
         case "eth_getBalance":
             // https://eth.wiki/json-rpc/API#eth_getbalance

@@ -8,8 +8,7 @@
 import Foundation
 import MEWwalletKit
 
-public struct Call: Codable {
-    
+public struct Call: Codable {    
     let from: Address?
     let to: Address
     let gas: Int? // BigInt?

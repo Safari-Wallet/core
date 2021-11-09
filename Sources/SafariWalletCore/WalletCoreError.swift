@@ -20,4 +20,6 @@ public enum WalletCoreError: Error {
     case noDefaultWallet
     case noClient
     case noCoreDelegate
+    case encodingError
+    case decodingError
 }

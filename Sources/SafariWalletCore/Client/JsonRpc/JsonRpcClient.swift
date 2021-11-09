@@ -66,6 +66,17 @@ public struct JsonRpcClient {
         return try await urlSession.data(for: urlRequest, delegate: nil).0
     }
     
+    public func makeRawRequest(data: Data, urlSession: WalletURLSession = URLSession.shared) async throws -> Data {
+        var urlRequest = URLRequest(url: url,
+                                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.httpBody = data
+
+        return try await urlSession.data(for: urlRequest, delegate: nil).0
+    }
+    
 //    func makeRequest(method: String, dictParams: Any, urlSession: WalletURLSession = URLSession.shared) async throws -> Data {
 //        var urlRequest = URLRequest(url: url,
 //                                    cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
