@@ -10,7 +10,7 @@ import MEWwalletKit
 import BigInt
 
 // https://dashboard.alchemyapi.io/composer
-public final class AlchemyClient: BaseClient {
+public final class AlchemyClient: EthereumClient {
         
     public init?(network: Network = .ethereum, key: String) {
         super.init(network: network, provider: .alchemy(key: key))

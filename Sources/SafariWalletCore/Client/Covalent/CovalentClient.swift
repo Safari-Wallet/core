@@ -7,7 +7,7 @@
 
 import Foundation
 import Network
-import MEWwalletKit
+import MEWwalletKit /*
 import Alamofire
 
 public final class CovalentClient {
@@ -78,3 +78,4 @@ public final class CovalentClient {
     }
    
 }
+*/

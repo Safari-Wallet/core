@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import MEWwalletKit
 import BigInt
 
 public class EthereumClient: BaseClient {
    
-   public init?(provider: NodeProvider) {
-      super.init(network: .ethereum, provider: provider)
+    public override init?(network: Network = .ethereum, provider: NodeProvider) {
+      super.init(network: network, provider: provider)
    }
    
    /*

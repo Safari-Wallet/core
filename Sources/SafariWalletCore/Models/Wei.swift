@@ -104,6 +104,12 @@ extension Wei: Equatable {
     }
 }
 
+extension Wei: Comparable {
+    public static func <(lhs: Wei, rhs: Wei) -> Bool {
+        return lhs.value < rhs.value
+    }
+}
+
 extension Wei: SignedNumeric {
     
     public typealias Magnitude = BigInt

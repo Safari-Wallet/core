@@ -49,8 +49,8 @@ class AlchemyTests: XCTestCase {
         let spender = Address(address: "0x2faf487a4414fe77e2327f0bf4ae2a264a776ad2")!
         
         let allowance = try await mainnetClient.alchemyTokenAllowance(tokenContract: tokenContract, owner: owner, spender: spender)
-        XCTAssertEqual(allowance, BigInt("79228162514264337593543950335")) // maxValue
-        XCTAssertEqual(allowance, "79228162514264337593543950335")
+        XCTAssertEqual(allowance, Wei(string: "79228162514264337593543950335")) // maxValue
+        XCTAssertEqual(allowance.description, "79228162514264337593543950335")
         print("allowance: \(allowance)")
     }
     
