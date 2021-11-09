@@ -35,10 +35,17 @@ public class EthereumClient: BaseClient {
     -H "Content-Type: application/json" \
     -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xc94770007dda54cF92009BFF0dE90c06F603a09f", "latest"],"id":0}'
     */
-   public func ethGetBalance(address: String, blockNumber: Block = .latest) async throws -> BigUInt {
+   public func ethGetBalance(address: String, blockNumber: Block = .latest) async throws -> Wei {
        let result = try await jsonRpcClient.makeRequest(method: "eth_getBalance", params: [address, blockNumber.stringValue], resultType: String.self)
-       guard let balance = BigUInt(result.stripHexPrefix(), radix: 16) else { throw WalletCoreError.unexpectedResponse(result) }
+       guard let balance = Wei(hexString: result) else { throw WalletCoreError.unexpectedResponse(result) }
        return balance
    }
+    
+    /// https://eth.wiki/json-rpc/API#eth_call
+    /// - Parameter params: <#params description#>
+    /// - Returns: <#description#>
+    public func ethCall(method: String, params: Any) async throws -> Any {
+        return try await jsonRpcClient.makeRequest(method: method, dictParams: params)
+    }
    
 }
