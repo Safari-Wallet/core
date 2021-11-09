@@ -51,7 +51,7 @@ extension Wei {
         self.value = value
     }
     
-    public init?(string: String) {
+    public init?(_ string: String) {
         guard let value = BigInt(string, radix: 10) else { return nil }
         self.value = value
     }
@@ -61,6 +61,7 @@ extension Wei {
         self.value = value
     }
     
+    // FIXME: If Gwei is a float, this returns nil
     public init?(gwei: GWei) {
         guard let amount = BigInt(gwei.description, radix: 10), let wei = BigInt(Wei.gWeiInWei.description, radix: 10) else { return nil }
         self.value = amount * wei
