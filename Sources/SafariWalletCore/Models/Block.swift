@@ -48,7 +48,7 @@ public enum Block: Hashable {
         } else if rawValue == "pending" {
             self = .pending
         } else {
-            self = .number(Int(rawValue, radix: 16) ?? 0)            
+            self = .number(Int(strtoul(rawValue, nil, 16)))
         }
     }
 }
