@@ -8,7 +8,7 @@
 import XCTest
 @testable import SafariWalletCore
 
-class BlockTest: XCTestCase {
+class BlockTests: XCTestCase {
 
     func testHexBlockNumberReturnsIntValue() {
         let hexBlockNumber = "0xCF6BAB"
