@@ -8,8 +8,6 @@
 import Foundation
 import MEWwalletKit
 
-//typealias Account = Address
-
 extension Address: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()

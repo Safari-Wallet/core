@@ -12,15 +12,15 @@ import BigInt
 
 class InfuraTests: XCTestCase {
 
-    var ropstenClient: BaseClient!
-    var mainnetClient: BaseClient!
+    var ropstenClient: EthereumClient!
+    var mainnetClient: EthereumClient!
     let uniswapTokenContract = Address(address: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984")
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         super.setUp()
-        self.ropstenClient = BaseClient(network: .ropsten, baseURL: .infura(key: "<INFURA ROPSTEN KEY HERE>"))
-        self.mainnetClient = BaseClient(network: .ethereum, baseURL: .infura(key: "<INFURA MAINNET KEY HERE"))
+        self.ropstenClient = EthereumClient(network: .ropsten, provider: .infura(key: "<INFURA ROPSTEN KEY HERE>"))
+        self.mainnetClient = EthereumClient(network: .ethereum, provider: .infura(key: "<INFURA MAINNET KEY HERE"))
     }
 
     override func tearDownWithError() throws {
@@ -41,7 +41,7 @@ class InfuraTests: XCTestCase {
     
     func testBalance() async throws {
         let balance = try await mainnetClient.ethGetBalance(address: "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B", blockNumber: .latest)
-        XCTAssertGreaterThan(balance, BigUInt(0))
+        XCTAssertGreaterThan(balance, Wei(0))
     }
     
     func testBlockHeight() async throws {
