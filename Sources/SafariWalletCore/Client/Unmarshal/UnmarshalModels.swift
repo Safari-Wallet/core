@@ -18,19 +18,13 @@ public enum Unmarshal {
         let transactions: [TokenTransaction]
     }
     
-    public enum TokenTransactionStatus: String, Codable {
-        case completed
-        case failed
-        case pending
-    }
-    
     public struct TokenTransaction: Codable {
         let id: String
         let from: Address
         let to: Address
         let fee: String
         let date: Int
-        let status: TokenTransactionStatus
+        let status: String
         let type: String
         let value: String
         let description: String

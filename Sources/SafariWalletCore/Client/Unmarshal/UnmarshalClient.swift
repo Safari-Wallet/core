@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-import Foundation
 import Network
 import MEWwalletKit
 import Alamofire
@@ -22,13 +20,26 @@ public final class UnmarshalClient {
         self.covalentKey = covalentKey
     }
     
-    public func getTransactions(address: String) async throws -> Unmarshal.TokenTransactionsResponse {
+    /*
+     * https://docs.unmarshal.io/unmarshal-apis/token-transactions-api
+     */
+    public func getTransactions(address: Address,
+                                page: Int? = nil,
+                                pageSize: Int? = nil) async throws -> Unmarshal.TokenTransactionsResponse {
+        var parameters: Parameters = [
+            "auth_key": covalentKey
+        ]
+        if let page = page {
+            parameters["page"] = String(page)
+        }
+        if let pageSize = pageSize {
+            parameters["pageSize"] = String(pageSize)
+        }
+        
         let req = AF.request(
-            "https://stg-api.unmarshal.io/v1/ethereum/address/0xb13943b4CC5B8F03A2e2872842C7E4118abdAe6F/transactions",
+            "https://stg-api.unmarshal.io/v1/ethereum/address/\(address.address)/transactions",
             method: .get,
-            parameters: [
-                "auth_key": covalentKey
-            ]
+            parameters: parameters
         )
         
         return try await withCheckedThrowingContinuation({ continuation in
