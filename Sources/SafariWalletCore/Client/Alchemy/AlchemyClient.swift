@@ -47,7 +47,7 @@ extension AlchemyClient {
     ///   - maxCount: max number of results to return per call. optional (default 1000)
     ///   - pageKey: for pagination. optional
     /// - Returns: Returns an array of asset transfers based on the specified paramaters.
-    public func alchemyAssetTransfers(fromBlock: Block = .earliest,
+    public func alchemyAssetTransfers(fromBlock: Block = .latest,
                                       toBlock: Block = .latest,
                                       fromAddress: Address? = nil,
                                       toAddress: Address? = nil,
@@ -75,15 +75,15 @@ extension AlchemyClient {
             let pageKey: String? // for pagination. optional
         }
         
-       let params = CallParams(fromBlock: fromBlock,
+        let params = CallParams(fromBlock: fromBlock,
                                 toBlock: toBlock,
                                 fromAddress: fromAddress,
                                 toAddress: toAddress,
                                 contractAddresses: contractAddresses,
                                 category: (transferCategory == .all ? nil : transferCategory.rawValue),
                                 excludeZeroValue: excludeZeroValue,
-                               maxCount: maxCount?.hexString,
-                               pageKey: pageKey?.hexString)
+                                maxCount: maxCount?.hexString,
+                                pageKey: pageKey?.hexString)
         let response = try await jsonRpcClient.makeRequest(method: "alchemy_getAssetTransfers", params: [params], resultType: AlchemyAssetTransfers.self)
         return response.transfers
     }
