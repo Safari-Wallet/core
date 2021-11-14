@@ -22,4 +22,6 @@ public enum WalletCoreError: Error {
     case noCoreDelegate
     case encodingError
     case decodingError
+    case signingError
+    case invalidHexString
 }

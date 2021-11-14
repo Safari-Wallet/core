@@ -7,6 +7,7 @@
 
 import Foundation
 import os.log
+import MEWwalletKit
 
 // Implementation of https://docs.metamask.io/guide/ethereum-provider.html and https://docs.metamask.io/guide/rpc-api.html
 public struct ProviderAPI {
@@ -125,9 +126,20 @@ public struct ProviderAPI {
             
         case "eth_sign":
             // https://eth.wiki/json-rpc/API#eth_sign
-            // FIXME: Returns mock result
-            return "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
-            
+            guard let params = params as? [String], params.count >= 2 else {
+                throw WalletCoreError.invalidParams
+            }
+            let address = params[0]
+            let message = params[1]
+            let password: String?
+            if params.count >= 3 {
+                password = params[2]
+            } else {
+                password = nil
+            }
+            let account = try await delegate.account(address: address, password: password)
+            return try account.sign(hexString: message)
+                        
         default:
             throw WalletCoreError.unknownMethod(method)
         }
