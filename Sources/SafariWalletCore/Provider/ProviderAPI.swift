@@ -22,7 +22,7 @@ public struct ProviderAPI {
     public func parseMessage(method: String, params: Any?) async throws -> Any {
 
         guard let client = delegate.client() else {
-            logger.critical("Safari-wallet SafariWebExtensionHandler: No delegate client")
+            logger.critical("ProviderAPI SafariWebExtensionHandler: No delegate client")
             throw WalletCoreError.noClient
         }
         
@@ -59,14 +59,14 @@ public struct ProviderAPI {
             return client.isConnected
         
         case "request":
-            throw WalletCoreError.notImplemented
+            throw WalletCoreError.notImplemented("request")
             
         // MARK: - JSONRPC API
         case "eth_accounts", "eth_requestAccounts", "eth_getAccounts":
             if let address = delegate.addresses()?.first {
-                logger.critical("Safari-wallet SafariWebExtensionHandler: fetching accounts: \(address)")
+                logger.critical("ProviderAPI SafariWebExtensionHandler: fetching accounts: \(address, privacy: .public)")
             } else {
-                logger.critical("Safari-wallet SafariWebExtensionHandler: adresses returned nil")
+                logger.critical("ProviderAPI SafariWebExtensionHandler: adresses returned nil")
             }
             
             // https://eth.wiki/json-rpc/API#eth_accounts
