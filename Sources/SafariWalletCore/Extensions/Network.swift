@@ -10,7 +10,7 @@ import MEWwalletKit
 
 extension Network {
     
-    init?(name: String) {
+    public init?(name: String) {
         
         switch name.lowercased() {
         case "bitcoin":
