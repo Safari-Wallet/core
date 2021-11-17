@@ -49,7 +49,7 @@ public enum Covalent {
         }
         
         public let block_signed_at: Date
-        public let block_height: Int?
+        public let block_height: Int
         public let tx_hash: String
         public let tx_offset: Int?
         public let successful: Bool?
