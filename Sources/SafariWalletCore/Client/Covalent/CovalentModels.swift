@@ -53,7 +53,7 @@ public enum Covalent {
         public let tx_hash: String
         public let tx_offset: Int?
         public let successful: Bool?
-        public let from_address: Address?
+        public let from_address: Address
         public let from_address_label: String?
         public let to_address: Address?
         public let to_address_label: String?

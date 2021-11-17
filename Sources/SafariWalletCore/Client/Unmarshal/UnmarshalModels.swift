@@ -21,11 +21,11 @@ public enum Unmarshal {
     public struct TokenTransaction: Codable {
         public let hash: String
         public let from: Address
-        public let to: Address
+        public let to: Address?
         public let fee: String
         public let date: Int
         public let status: String
-        public let type: String
+        public let type: String?
         public let value: String
         public let description: String
         public let blockNumber: Int
