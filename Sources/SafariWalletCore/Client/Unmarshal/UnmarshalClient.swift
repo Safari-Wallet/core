@@ -12,22 +12,21 @@ import Alamofire
 
 public final class UnmarshalClient {
     
-    let network: Network
-    let covalentKey: String
+    let apiKey: String
     
-    public init?(network: Network = .ethereum, covalentKey: String) {
-        self.network = network
-        self.covalentKey = covalentKey
+    public init?(apiKey: String) {
+        self.apiKey = apiKey
     }
     
     /*
      * https://docs.unmarshal.io/unmarshal-apis/token-transactions-api
      */
-    public func getTransactions(address: Address,
+    public func getTransactions(network: Network = .ethereum,
+                                address: Address,
                                 page: Int? = nil,
-                                pageSize: Int? = nil) async throws -> Unmarshal.TokenTransactionsResponse {
+                                pageSize: Int? = nil) async throws -> [Unmarshal.TokenTransaction] {
         var parameters: Parameters = [
-            "auth_key": covalentKey
+            "auth_key": apiKey
         ]
         if let page = page {
             parameters["page"] = String(page)
@@ -37,7 +36,7 @@ public final class UnmarshalClient {
         }
         
         let req = AF.request(
-            "https://stg-api.unmarshal.io/v1/ethereum/address/\(address.address)/transactions",
+            "https://stg-api.unmarshal.io/v1/\(network.name.lowercased())/address/\(address.address)/transactions",
             method: .get,
             parameters: parameters
         )
@@ -48,7 +47,7 @@ public final class UnmarshalClient {
             req.responseDecodable(of: Unmarshal.TokenTransactionsResponse.self, decoder: decoder) { dataResponse in
                 switch dataResponse.result {
                     case .success(let response):
-                        return continuation.resume(with: .success(response))
+                        return continuation.resume(with: .success(response.transactions))
                     case .failure(let error):
                         print(error)
                         return continuation.resume(throwing: error)

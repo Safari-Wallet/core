@@ -12,24 +12,20 @@ import Alamofire
 
 public final class CovalentClient {
     
-    let network: Network
-    let covalentKey: String
+    let apiKey: String
     
-    public init?(network: Network = .ethereum, covalentKey: String) {
-        self.network = network
-        self.covalentKey = covalentKey
+    public init?(apiKey: String) {
+        self.apiKey = apiKey
     }
     
-    public func getTransactions(chain: String,
-                                address: String,
-                                currency: String,
-                                symbol: String) async throws -> [Covalent.Transaction] {
+    public func getTransactions(network: Network = .ethereum,
+                                address: Address) async throws -> [Covalent.Transaction] {
         let req = AF.request(
-            "https://api.covalenthq.com/v1/\(self.network.chainID)/address/\(address)/transactions_v2/",
+            "https://api.covalenthq.com/v1/\(network.chainID)/address/\(address.address)/transactions_v2/",
             method: .get,
             parameters: [
-                "key": covalentKey,
-                "quote-currency": currency
+                "key": apiKey,
+                "quote-currency": "USD"
             ]
         )
         
