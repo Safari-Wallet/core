@@ -16,7 +16,7 @@ public struct Account {
     public let wallet: String
     public let derivationpath: String
     
-    init(privateKey: PrivateKeyEth1, wallet: String, derivationpath: String) throws {
+    public init(privateKey: PrivateKeyEth1, wallet: String, derivationpath: String) throws {
         self.privateKey = privateKey
         self.publicKey = try privateKey.publicKey()
         guard let address = privateKey.address() else { throw WalletCoreError.addressGenerationError }
