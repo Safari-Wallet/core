@@ -78,7 +78,7 @@ public struct AlchemyRawContract: Codable {
     public let decimal: String?
 }
 
-public struct AlchemyAssetTransfer: Codable {
+public struct AlchemyAssetTransfer {
     public let blockNum: Block
     public let hash: String
     public let from: Address
@@ -88,6 +88,13 @@ public struct AlchemyAssetTransfer: Codable {
     public let asset: String?
     public let category: AlchemyAssetTransferCategory?
     public let rawContract: AlchemyRawContract?
+}
+
+
+//THe purpose of this extension is to maintain the memberwise initlizer
+//https://sarunw.com/posts/how-to-preserve-memberwise-initializer/
+//Unfortuatley this only works in frameworks
+extension AlchemyAssetTransfer: Codable {
 }
 
 public struct AlchemyAssetTransfers: Codable {

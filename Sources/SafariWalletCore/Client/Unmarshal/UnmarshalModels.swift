@@ -18,7 +18,7 @@ public enum Unmarshal {
         public let transactions: [TokenTransaction]
     }
     
-    public struct TokenTransaction: Codable {
+    public struct TokenTransaction {
         public let hash: String
         public let from: Address
         public let to: Address?
@@ -27,21 +27,25 @@ public enum Unmarshal {
         public let status: String
         public let type: String?
         public let value: String
-        public let description: String
+        public let details: String
         public let blockNumber: Int
-        
-        enum CodingKeys: String, CodingKey {
-            case hash = "id"
-            case from
-            case to
-            case fee
-            case date
-            case status
-            case type
-            case value
-            case description
-            case blockNumber = "block"
-        }
+    }
+    
+}
+
+extension Unmarshal.TokenTransaction: Codable {
+    
+    enum CodingKeys: String, CodingKey {
+        case hash = "id"
+        case from
+        case to
+        case fee
+        case date
+        case status
+        case type
+        case value
+        case details = "description"
+        case blockNumber = "block"
     }
     
 }
