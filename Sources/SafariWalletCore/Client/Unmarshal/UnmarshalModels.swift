@@ -11,23 +11,41 @@ import MEWwalletKit
 public enum Unmarshal {
     
     public struct TokenTransactionsResponse: Codable {
-        let page: Int
-        let total_pages: Int
-        let items_on_page: Int
-        let total_txs: Int
-        let transactions: [TokenTransaction]
+        public let page: Int
+        public let total_pages: Int
+        public let items_on_page: Int
+        public let total_txs: Int
+        public let transactions: [TokenTransaction]
     }
     
-    public struct TokenTransaction: Codable {
-        let id: String
-        let from: Address
-        let to: Address
-        let fee: String
-        let date: Int
-        let status: String
-        let type: String
-        let value: String
-        let description: String
+    public struct TokenTransaction {
+        public let hash: String
+        public let from: Address
+        public let to: Address?
+        public let fee: String
+        public let date: Int
+        public let status: String
+        public let type: String?
+        public let value: String
+        public let details: String
+        public let blockNumber: Int
+    }
+    
+}
+
+extension Unmarshal.TokenTransaction: Codable {
+    
+    enum CodingKeys: String, CodingKey {
+        case hash = "id"
+        case from
+        case to
+        case fee
+        case date
+        case status
+        case type
+        case value
+        case details = "description"
+        case blockNumber = "block"
     }
     
 }
