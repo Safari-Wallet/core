@@ -10,7 +10,7 @@ import MEWwalletKit
 
 extension Network {
     
-    public init?(name: String) {
+    public init(name: String) {
         
         switch name.lowercased() {
         case "bitcoin":
@@ -84,7 +84,21 @@ extension Network {
         case "Eth 2.0".lowercased():
             self = .eth2Withdrawal
         default:
-            return nil
+            self = .ethereum
         }
+    }
+}
+
+extension Network: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try container.decode(String.self)
+        self.init(name: string)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.name.lowercased())
     }
 }
