@@ -24,7 +24,7 @@ public final class UnmarshalClient {
     public func getTransactions(network: Network = .ethereum,
                                 address: Address,
                                 page: Int? = nil,
-                                pageSize: Int? = nil) async throws -> [Unmarshal.TokenTransaction] {
+                                pageSize: Int? = nil) async throws -> Unmarshal.TokenTransactionsResponse {
         var parameters: Parameters = [
             "auth_key": apiKey
         ]
@@ -47,7 +47,7 @@ public final class UnmarshalClient {
             req.responseDecodable(of: Unmarshal.TokenTransactionsResponse.self, decoder: decoder) { dataResponse in
                 switch dataResponse.result {
                     case .success(let response):
-                        return continuation.resume(with: .success(response.transactions))
+                        return continuation.resume(with: .success(response))
                     case .failure(let error):
                         print(error)
                         return continuation.resume(throwing: error)
