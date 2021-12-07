@@ -8,6 +8,16 @@
 import Foundation
 import MEWwalletKit
 
+
+
+/*
+ For now Safari Wallet only supports:
+ - .ethereum
+ - .ropsten
+ - .ledgerLiveEthereum
+
+ */
+
 extension Network {
     
     public init(name: String) {

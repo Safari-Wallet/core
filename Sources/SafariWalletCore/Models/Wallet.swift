@@ -16,10 +16,10 @@ extension Wallet {
         let mnemonic = mnemonicArray.joined(separator: " ")
         return (wallet, mnemonic)
     }
-    
-    public static func restoreHDWallet(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws -> Wallet {
+       
+    convenience init(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws {
         guard let seed = try BIP39(mnemonic: mnemonic.components(separatedBy: " ")).seed() else { throw MEWwalletKit.WalletError.emptySeed }
-        return try Wallet(seed: seed, network: network)
+        try self.init(seed: seed, network: network)
     }
     
     public func fetchPrivateKeyFor(index: Int) async throws -> PK {
