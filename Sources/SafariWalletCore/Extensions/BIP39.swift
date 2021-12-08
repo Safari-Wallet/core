@@ -10,7 +10,7 @@ import MEWwalletKit
 
 extension BIP39 {
     
-    convenience init(mnemonic: String) throws {
+    public convenience init(mnemonic: String) throws {
         self.init(mnemonic: mnemonic.components(separatedBy: " "))
     }
 }

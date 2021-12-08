@@ -17,7 +17,7 @@ extension Wallet {
         return (wallet, mnemonic)
     }
        
-    convenience init(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws {
+    public convenience init(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws {
         guard let seed = try BIP39(mnemonic: mnemonic.components(separatedBy: " ")).seed() else { throw MEWwalletKit.WalletError.emptySeed }
         try self.init(seed: seed, network: network)
     }
