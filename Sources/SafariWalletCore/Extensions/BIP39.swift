@@ -14,3 +14,16 @@ extension BIP39 {
         self.init(mnemonic: mnemonic.components(separatedBy: " "))
     }
 }
+
+// MARK: - Recovery phrase shuffle and
+extension BIP39 {
+      
+    public func shuffle() -> [String]? {
+        return self.mnemonic?.shuffled()
+    }
+    
+    public func isEqual(to phrase: [String]) -> Bool {
+        guard let mnemonic = self.mnemonic else { return false }
+        return mnemonic == phrase
+    }    
+}
