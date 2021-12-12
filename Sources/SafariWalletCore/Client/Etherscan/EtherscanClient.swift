@@ -8,46 +8,37 @@
 import Foundation
 import Network
 import MEWwalletKit
-import Alamofire
 
 public final class EtherscanClient {
     
-    let apiKey: String
+    private let apiKey: String
+    private let client: NetworkClient
     
-    public init(apiKey: String) {
+    public convenience init(apiKey: String) {
+        self.init(apiKey: apiKey, client:  NetworkClientImpl())
+    }
+    
+    init(apiKey: String, client: NetworkClient) {
         self.apiKey = apiKey
+        self.client = client
     }
     
     /*
      * https://docs.etherscan.io/api-endpoints/contracts
      */
     public func getContractDetails(forAddress address: Address) async throws -> Etherscan.ContractResponse {
-        let parameters: Parameters = [
-            "apikey": apiKey,
-            "module": "contract",
-            "action": "getsourcecode",
-            "address": address.address
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.etherscan.io"
+        components.path = "/api"
+        components.queryItems = [
+            URLQueryItem(name: "apikey", value: apiKey),
+            URLQueryItem(name: "module", value: "contract"),
+            URLQueryItem(name: "action", value: "getsourcecode"),
+            URLQueryItem(name: "address", value: address.address)
         ]
         
-        let req = AF.request(
-            "https://api.etherscan.io/api",
-            method: .get,
-            parameters: parameters
-        )
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            req.responseDecodable(of: Etherscan.ContractResponse.self, decoder: decoder) { dataResponse in
-                switch dataResponse.result {
-                    case .success(let response):
-                        return continuation.resume(with: .success(response))
-                    case .failure(let error):
-                        print(error)
-                        return continuation.resume(throwing: error)
-                }
-            }
-        }
+        return try await client.fetch(from: components)
     }
-   
+
 }
