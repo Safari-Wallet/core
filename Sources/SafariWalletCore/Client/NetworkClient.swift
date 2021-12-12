@@ -34,7 +34,7 @@ public extension NetworkClient {
         decoder: JSONDecoder = JSONDecoder()
     ) async throws -> T {
         let (data, response) = try await session.data(for: request)
-        return try handle(data: data, response: response, decoder: decoder)
+        return try decodedResponse(data: data, response: response, decoder: decoder)
     }
     
     func fetch<T: Decodable>(
@@ -52,10 +52,10 @@ public extension NetworkClient {
         decoder: JSONDecoder = JSONDecoder()
     ) async throws -> T {
         let (data, response) = try await session.data(from: url)
-        return try handle(data: data, response: response, decoder: decoder)
+        return try decodedResponse(data: data, response: response, decoder: decoder)
     }
     
-    private func handle<T: Decodable>(
+    private func decodedResponse<T: Decodable>(
         data: Data,
         response: URLResponse,
         decoder: JSONDecoder
