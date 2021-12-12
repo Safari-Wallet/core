@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import Network
-import MEWwalletKit
 
 public final class EtherscanClient {
     
@@ -22,11 +20,23 @@ public final class EtherscanClient {
         self.apiKey = apiKey
         self.client = client
     }
+}
+
+// MARK: - Contracts
+
+extension EtherscanClient {
     
-    /*
-     * https://docs.etherscan.io/api-endpoints/contracts
-     */
-    public func getContractDetails(forAddress address: Address) async throws -> Etherscan.ContractResponse {
+    /// Returns contract details based on the contract request.
+    /// - SeeAlso: [Etherscan documentation](https://docs.etherscan.io/api-endpoints/contracts)
+    /// - Parameters:
+    ///   - address: in hex string.
+    /// - Returns: Returns contract details based on the contract request.
+    public func getContractDetails(forAddress address: String) async throws -> Etherscan.ContractResponse {
+        let components = makeComponents(from: address)
+        return try await client.fetch(from: components)
+    }
+   
+    private func makeComponents(from address: String) -> URLComponents {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.etherscan.io"
@@ -35,10 +45,8 @@ public final class EtherscanClient {
             URLQueryItem(name: "apikey", value: apiKey),
             URLQueryItem(name: "module", value: "contract"),
             URLQueryItem(name: "action", value: "getsourcecode"),
-            URLQueryItem(name: "address", value: address.address)
+            URLQueryItem(name: "address", value: address)
         ]
-        
-        return try await client.fetch(from: components)
+        return components
     }
-
 }
