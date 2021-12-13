@@ -36,8 +36,6 @@ extension EtherscanClient {
         address: String
     ) throws -> Endpoint<Etherscan.ContractResponse> {
         guard let url = URL(string: "https://api.etherscan.io/api/") else { throw InvalidRequestError() }
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
         let query = [
             "apikey": apiKey,
             "module": "contract",
@@ -47,8 +45,7 @@ extension EtherscanClient {
         return Endpoint(
             json: .get,
             url: url,
-            query: query,
-            decoder: decoder
+            query: query
         )
     }
 }
