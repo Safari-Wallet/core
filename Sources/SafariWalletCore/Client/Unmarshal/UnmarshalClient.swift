@@ -12,15 +12,11 @@ import MEWwalletKit
 public final class UnmarshalClient {
     
     private let apiKey: String
-    private let client: NetworkClient
+    private let urlSession: URLSession
     
-    public convenience init(apiKey: String) {
-        self.init(apiKey: apiKey, client:  NetworkClientImpl())
-    }
-    
-    init(apiKey: String, client: NetworkClient) {
+    public init(apiKey: String, urlSession: URLSession = .shared) {
         self.apiKey = apiKey
-        self.client = client
+        self.urlSession = urlSession
     }
 }
 
@@ -44,30 +40,30 @@ extension UnmarshalClient {
                                 address: Address,
                                 page: Int? = nil,
                                 pageSize: Int? = nil) async throws -> Unmarshal.TokenTransactionsResponse {
-        let components = makeComponentsFrom(network: network, address: address, page: page, pageSize: pageSize)
-        return try await client.fetch(from: components)
+        let endpoint = try makeEndpointFrom(network: network, address: address, page: page, pageSize: pageSize)
+        return try await urlSession.load(endpoint)
     }
-   
-    private func makeComponentsFrom(
+    
+    private func makeEndpointFrom(
         network: Network,
         address: Address,
-        page: Int? = nil,
-        pageSize: Int? = nil
-    ) -> URLComponents {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "stg-api.unmarshal.io"
-        components.path = "/v1/\(network.name.lowercased())/address/\(address.address)/transactions"
-        components.queryItems = [
-            URLQueryItem(name: "auth_key", value: apiKey)
+        page: Int?,
+        pageSize: Int?
+    ) throws -> Endpoint<Unmarshal.TokenTransactionsResponse> {
+        guard let url = URL(string: "https://stg-api.unmarshal.io/v1/\(network.name.lowercased())/address/\(address.address)/transactions") else { throw InvalidRequestError() }
+        var query = [
+            "auth_key": apiKey
         ]
-        
         if let page = page {
-            components.queryItems?.append(URLQueryItem(name: "page", value: String(page)))
+            query["page"] = String(page)
         }
         if let pageSize = pageSize {
-            components.queryItems?.append(URLQueryItem(name: "pageSize", value: String(pageSize)))
+            query["pageSize"] = String(pageSize)
         }
-        return components
+        return Endpoint(
+            json: .get,
+            url: url,
+            query: query
+        )
     }
 }

@@ -10,15 +10,11 @@ import Foundation
 public final class EtherscanClient {
     
     private let apiKey: String
-    private let client: NetworkClient
+    private let urlSession: URLSession
     
-    public convenience init(apiKey: String) {
-        self.init(apiKey: apiKey, client:  NetworkClientImpl())
-    }
-    
-    init(apiKey: String, client: NetworkClient) {
+    public init(apiKey: String, urlSession: URLSession = .shared) {
         self.apiKey = apiKey
-        self.client = client
+        self.urlSession = urlSession
     }
 }
 
@@ -32,21 +28,27 @@ extension EtherscanClient {
     ///   - address: in hex string.
     /// - Returns: Returns contract details based on the contract request.
     public func getContractDetails(forAddress address: String) async throws -> Etherscan.ContractResponse {
-        let components = makeComponents(from: address)
-        return try await client.fetch(from: components)
+        let endpoint = try makeEndpointFrom(address: address)
+        return try await urlSession.load(endpoint)
     }
-   
-    private func makeComponents(from address: String) -> URLComponents {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.etherscan.io"
-        components.path = "/api"
-        components.queryItems = [
-            URLQueryItem(name: "apikey", value: apiKey),
-            URLQueryItem(name: "module", value: "contract"),
-            URLQueryItem(name: "action", value: "getsourcecode"),
-            URLQueryItem(name: "address", value: address)
+    
+    private func makeEndpointFrom(
+        address: String
+    ) throws -> Endpoint<Etherscan.ContractResponse> {
+        guard let url = URL(string: "https://api.etherscan.io/api/") else { throw InvalidRequestError() }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let query = [
+            "apikey": apiKey,
+            "module": "contract",
+            "action": "getsourcecode",
+            "address": address
         ]
-        return components
+        return Endpoint(
+            json: .get,
+            url: url,
+            query: query,
+            decoder: decoder
+        )
     }
 }
