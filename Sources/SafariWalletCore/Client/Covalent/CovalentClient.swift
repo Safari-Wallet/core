@@ -7,40 +7,51 @@
 
 import Foundation
 import Network
-import MEWwalletKit 
-import Alamofire
+import MEWwalletKit
 
 public final class CovalentClient {
     
-    let apiKey: String
+    private let apiKey: String
+    private let urlSession: URLSession
     
-    public init?(apiKey: String) {
+    public init(apiKey: String, urlSession: URLSession = .shared) {
         self.apiKey = apiKey
+        self.urlSession = urlSession
     }
+}
+
+// MARK: - Transactions
+
+extension CovalentClient {
     
+    /// Returns an array transactions based on the address.
+    /// - Parameters:
+    ///   - network: blockchain network.
+    ///   - address: in hex string.
+    /// - Returns: Returns an array transactions based on the address.
     public func getTransactions(network: Network = .ethereum,
                                 address: Address) async throws -> [Covalent.Transaction] {
-        let req = AF.request(
-            "https://api.covalenthq.com/v1/\(network.chainID)/address/\(address.address)/transactions_v2/",
-            method: .get,
-            parameters: [
-                "key": apiKey,
-                "quote-currency": "USD"
-            ]
-        )
-        
-        return try await withCheckedThrowingContinuation({ continuation in
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            req.responseDecodable(of: Covalent.Response<Covalent.GetTransactionsResponseData>.self, decoder: decoder) { dataResponse in
-                switch dataResponse.result {
-                    case .success(let transactionResponse):
-                        return continuation.resume(with: .success(transactionResponse.data.items))
-                    case .failure(let error):
-                        return continuation.resume(throwing: error)
-                }
-            }
-        })
+        let endpoint = try makeEndpointFrom(network: network, address: address)
+        let response = try await urlSession.load(endpoint)
+        return response.data.items
     }
-   
+    
+    private func makeEndpointFrom(
+        network: Network,
+        address: Address
+    ) throws -> Endpoint<Covalent.Response<Covalent.GetTransactionsResponseData>> {
+        guard let url = URL(string: "https://api.covalenthq.com/v1/\(network.chainID)/address/\(address.address)/transactions_v2/") else { throw InvalidRequestError() }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let query = [
+            "key": apiKey,
+            "quote-currency": "USD"
+        ]
+        return Endpoint(
+            json: .get,
+            url: url,
+            query: query,
+            decoder: decoder
+        )
+    }
 }
