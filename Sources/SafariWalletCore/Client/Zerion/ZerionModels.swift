@@ -6,117 +6,116 @@
 //
 
 import Foundation
-import MEWwalletKit
 
 public enum Zerion {
 
-    struct Response: Decodable {
-        let payload: Payload
+    public struct Response: Decodable {
+        public let payload: Payload
     }
 
-    struct Payload: Decodable {
-        let transactions: [Transaction]
+    public struct Payload: Decodable {
+        public let transactions: [Transaction]
     }
 
-    struct Transaction: Decodable {
-        let hash: String
-        let addressFrom: String?
-        let addressTo: String?
-        let blockNumber: Int
-        let contract: String?
-        let direction: String?
-        let id: String
-        let minedAt: Int
-        let nonce: Int?
-        let changes: [Change]?
-        let fee: Fee?
-        let type: String
-        let status: String
+    public struct Transaction: Decodable {
+        public let hash: String
+        public let addressFrom: String?
+        public let addressTo: String?
+        public let blockNumber: Int
+        public let contract: String?
+        public let direction: String?
+        public let id: String
+        public let minedAt: Int
+        public let nonce: Int?
+        public let changes: [Change]?
+        public let fee: Fee?
+        public let type: String
+        public let status: String
     }
 
-    struct Change: Decodable {
-        let price: Double?
-        let addressFrom: String
-        let value: Double
-        let direction, addressTo: String
-        let asset: ChangeAsset
-        let nftAsset: NftAsset?
+    public struct Change: Decodable {
+        public let price: Double?
+        public let addressFrom: String
+        public let value: Double
+        public let direction, addressTo: String
+        public let asset: ChangeAsset
+        public let nftAsset: NftAsset?
     }
 
-    struct ChangeAsset: Decodable {
-        let assetCode, symbol: String
-        let isVerified: Bool
-        let id: String
-        let decimals: Int
-        let price: ChangeAssetPrice?
-        let iconURL: String?
-        let isDisplayable: Bool
-        let type: String?
-        let name: String
-        let implementations: Implementations
+    public struct ChangeAsset: Decodable {
+        public let assetCode, symbol: String
+        public let isVerified: Bool
+        public let id: String
+        public let decimals: Int
+        public let price: ChangeAssetPrice?
+        public let iconURL: String?
+        public let isDisplayable: Bool
+        public let type: String?
+        public let name: String
+        public let implementations: Implementations
     }
 
-    struct ChangeAssetPrice: Decodable {
-        let value: Double?
-        let relativeChange24h: Double?
-        let changedAt: Int?
+    public struct ChangeAssetPrice: Decodable {
+        public let value: Double?
+        public let relativeChange24h: Double?
+        public let changedAt: Int?
     }
 
-    struct Implementations: Decodable {
-        let ethereum: Ethereum?
+    public struct Implementations: Decodable {
+        public let ethereum: Ethereum?
     }
 
-    struct Ethereum: Decodable {
-        let address: String?
-        let decimals: Int
+    public struct Ethereum: Decodable {
+        public let address: String?
+        public let decimals: Int
     }
 
-    struct NftAsset: Decodable {
-        let collection: NftCollection?
-        let relevantUrls: [RelevantURL]
-        let description: String
-        let attributes: [NftAttribute]
-        let asset: NftAssetAsset
+    public struct NftAsset: Decodable {
+        public let collection: NftCollection?
+        public let relevantUrls: [RelevantURL]
+        public let description: String
+        public let attributes: [NftAttribute]
+        public let asset: NftAssetAsset
     }
 
-    struct NftAttribute: Decodable {
-        let key: String
-        let value: String
+    public struct NftAttribute: Decodable {
+        public let key: String
+        public let value: String
     }
 
-    struct NftAssetAsset: Decodable {
-        let detail, preview: Detail
-        let isVerified: Bool
-        let floorPrice: Double
-        let symbol: String
-        let lastPrice: Double?
-        let tokenId: String
-        let contractAddress: String
-        let type: String
-        let interface: String
-        let assetCode: String
-        let isDisplayable: Bool
-        let name: String
-        let collection: NftCollection
+    public struct NftAssetAsset: Decodable {
+        public let detail, preview: Detail
+        public let isVerified: Bool
+        public let floorPrice: Double
+        public let symbol: String
+        public let lastPrice: Double?
+        public let tokenId: String
+        public let contractAddress: String
+        public let type: String
+        public let interface: String
+        public let assetCode: String
+        public let isDisplayable: Bool
+        public let name: String
+        public let collection: NftCollection
     }
 
-    struct NftCollection: Decodable {
-        let name: String
-        let iconUrl: String
-        let description: String
+    public struct NftCollection: Decodable {
+        public let name: String
+        public let iconUrl: String
+        public let description: String
     }
 
-    struct Detail: Decodable {
-        let url: String
+    public struct Detail: Decodable {
+        public let url: String
     }
 
-    struct RelevantURL: Decodable {
-        let name: String
-        let url: String
+    public struct RelevantURL: Decodable {
+        public let name: String
+        public let url: String
     }
 
-    struct Fee: Decodable {
-        let value: Int?
-        let price: Double?
+    public struct Fee: Decodable {
+        public let value: Int?
+        public let price: Double?
     }
 }
