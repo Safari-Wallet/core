@@ -32,8 +32,8 @@ extension Wallet {
     ///   - network: Network for addresses to be generated (default is Ethereum)
     /// - Returns: Array of addresses
     /// - Throws: WalletError.addressGenerationError if an address couldn't be generated
-    public func generateAddresses(count: Int, startIndex: Int = 0, network: Network = .ethereum) throws -> [Address] {
-        var addresses = [Address]()
+    public func generateAddresses(count: Int, startIndex: Int = 0, network: Network = .ethereum) throws -> [MEWwalletKit.Address] {
+        var addresses = [MEWwalletKit.Address]()
         for i in startIndex ..< startIndex + count {
             guard let address = try self.derive(network, index: UInt32(i)).privateKey.address() else {
                 throw WalletCoreError.addressGenerationError
