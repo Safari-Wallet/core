@@ -13,7 +13,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
     
     public let id: Int
     
-    let addressString: String
+    public let addressString: String
     
     private let mewAddress: MEWwalletKit.Address
     
