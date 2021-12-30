@@ -8,7 +8,7 @@
 import Foundation
 import MEWwalletKit
 
-extension Address: Codable {
+extension MEWwalletKit.Address: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(self.address)
