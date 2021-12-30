@@ -13,7 +13,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
     
     public let id: Int
     
-//    let address: String
+    let addressString: String
     
     private let mewAddress: MEWwalletKit.Address
     
@@ -30,7 +30,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         case ensName
         case accountName
         case bundleUUID
-//        case address
+        case address
         case mewAddress
         case derivationIndex
     }
@@ -39,6 +39,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         self.id = derivationIndex
         self.accountName = accountName
         self.bundleUUID = bundleUUID
+        self.addressString = address.address
         self.mewAddress = address
         self.derivationIndex = derivationIndex
     }
@@ -55,6 +56,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         accountName = try container.decode(String?.self, forKey: .accountName)
         bundleUUID = try container.decode(UUID.self, forKey: .bundleUUID)
         mewAddress = try container.decode(MEWwalletKit.Address.self, forKey: .mewAddress)
+        addressString = try container.decode(String.self, forKey: .address)
         derivationIndex = try container.decode(Int.self, forKey: .derivationIndex)
         id = derivationIndex
     }
@@ -65,6 +67,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         try container.encode(accountName, forKey: .accountName)
         try container.encode(bundleUUID, forKey: .bundleUUID)
         try container.encode(mewAddress, forKey: .mewAddress)
+        try container.encode(addressString, forKey: .address)
         try container.encode(derivationIndex, forKey: .derivationIndex)
     }
 }
