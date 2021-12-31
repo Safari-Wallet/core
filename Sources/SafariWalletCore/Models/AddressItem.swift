@@ -25,16 +25,7 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
     public let bundleUUID: UUID
     
     let derivationIndex: Int
-        
-    public enum CodingKeys: CodingKey {
-        case ensName
-        case accountName
-        case bundleUUID
-        case address
-        case mewAddress
-        case derivationIndex
-    }
-    
+           
     public init(address: MEWwalletKit.Address, derivationIndex: Int, bundleUUID: UUID, accountName: String?) {
         self.id = derivationIndex
         self.accountName = accountName
@@ -70,6 +61,15 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         try container.encode(addressString, forKey: .address)
         try container.encode(derivationIndex, forKey: .derivationIndex)
     }
+    
+    public enum CodingKeys: CodingKey {
+        case ensName
+        case accountName
+        case bundleUUID
+        case address
+        case mewAddress
+        case derivationIndex
+    }    
 }
 
 
