@@ -6,11 +6,22 @@
 //
 
 import Foundation
+import MEWwalletKit
 
 public enum Zerion {
 
     public struct Response: Decodable {
+        public let meta: Meta
         public let payload: Payload
+    }
+    
+    public struct Meta: Codable {
+        public let status: String
+        public let address: String?
+        public let transactionsOffset: Int
+        public let addresses: [String]
+        public let transactionsLimit: Int
+        public let currency: String
     }
 
     public struct Payload: Decodable {
@@ -18,32 +29,58 @@ public enum Zerion {
     }
 
     public struct Transaction: Decodable {
-        public let hash: String
-        public let addressFrom: String?
+        public let txHash: String
+        public let addressFrom: String
         public let addressTo: String?
+        public let `protocol`: String?
         public let blockNumber: Int
         public let contract: String?
-        public let direction: String?
+        public let direction: Direction?
         public let id: String
         public let minedAt: Int
         public let nonce: Int?
-        public let changes: [Change]?
+        public let changes: [TransactionChange]?
         public let fee: Fee?
-        public let type: String
+        public let txType: String
         public let status: String
+        
+        enum CodingKeys: String, CodingKey {
+            case txHash = "hash"
+            case addressFrom
+            case addressTo
+            case `protocol`
+            case blockNumber
+            case contract
+            case direction
+            case id
+            case minedAt
+            case nonce
+            case changes
+            case fee
+            case txType = "type"
+            case status
+        }
     }
 
-    public struct Change: Decodable {
+    public struct TransactionChange: Decodable {
         public let price: Double?
         public let addressFrom: String
+        public let addressTo: String
         public let value: Double
-        public let direction, addressTo: String
+        public let direction: Direction
         public let asset: ChangeAsset
-        public let nftAsset: NftAsset?
+//        public let nftAsset: NftAsset? // Need to fix decoding issue
+    }
+    
+    public enum Direction: String, Decodable {
+        case `in`
+        case out
+        case `self`
     }
 
     public struct ChangeAsset: Decodable {
-        public let assetCode, symbol: String
+        public let assetCode: String
+        public let symbol: String
         public let isVerified: Bool
         public let id: String
         public let decimals: Int
@@ -56,9 +93,9 @@ public enum Zerion {
     }
 
     public struct ChangeAssetPrice: Decodable {
-        public let value: Double?
+        public let value: Double
         public let relativeChange24h: Double?
-        public let changedAt: Int?
+        public let changedAt: Int
     }
 
     public struct Implementations: Decodable {
@@ -115,7 +152,7 @@ public enum Zerion {
     }
 
     public struct Fee: Decodable {
-        public let value: Int?
-        public let price: Double?
+        public let value: Int
+        public let price: Double
     }
 }
