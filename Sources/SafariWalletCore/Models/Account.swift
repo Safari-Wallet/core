@@ -12,7 +12,7 @@ public struct Account {
     
     public let addresss: Address
     public let publicKey: PublicKeyEth1
-    public let privateKey: PrivateKeyEth1
+    private let privateKey: PrivateKeyEth1
     public let wallet: String
     public let derivationpath: String
     
@@ -34,4 +34,26 @@ public struct Account {
         }
         return signedMessage
     }
+    
+//    public init(address: Address, path: String, network: Network, mnemonic: String)
+    /*
+    public func sign(tx: Transaction) throws -> String {
+        return ""
+        try tx.sign(key: privateKey)
+        guard let data = tx.serialize(), let string = String(data: data, encoding: .utf8)?.addHexPrefix() else {
+            throw WalletCoreError.signingError
+        }
+        return string
+    }
+    
+    public func sign(_ transaction: Transaction) -> Data {
+        return Data()
+    }
+    
+    public func encrypt(cleartext: Data) -> Data {
+        return Data()
+    }
+
+
+    */
 }
