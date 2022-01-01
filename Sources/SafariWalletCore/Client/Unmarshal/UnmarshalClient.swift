@@ -8,53 +8,62 @@
 import Foundation
 import Network
 import MEWwalletKit
-import Alamofire
 
 public final class UnmarshalClient {
     
-    let network: Network
-    let covalentKey: String
+    private let apiKey: String
+    private let urlSession: URLSession
     
-    public init?(network: Network = .ethereum, covalentKey: String) {
-        self.network = network
-        self.covalentKey = covalentKey
+    public init(apiKey: String, urlSession: URLSession = .shared) {
+        self.apiKey = apiKey
+        self.urlSession = urlSession
     }
+}
+
+// MARK: - Transactions
+
+extension UnmarshalClient {
     
     /*
      * https://docs.unmarshal.io/unmarshal-apis/token-transactions-api
      */
-    public func getTransactions(address: Address,
+    
+    /// Returns an array transactions based on the address.
+    /// - SeeAlso: [Unmarshal documentation](https://docs.unmarshal.io/unmarshal-apis/token-transactions-api)
+    /// - Parameters:
+    ///   - network: blockchain network.
+    ///   - address: in hex string.
+    ///   - page: page number. optional
+    ///   - pageSize: number of records to be displayed per page. optional
+    /// - Returns: Returns an array transactions based on the address.
+    public func getTransactions(network: Network = .ethereum,
+                                address: Address,
                                 page: Int? = nil,
                                 pageSize: Int? = nil) async throws -> Unmarshal.TokenTransactionsResponse {
-        var parameters: Parameters = [
-            "auth_key": covalentKey
+        let endpoint = try makeEndpointFrom(network: network, address: address, page: page, pageSize: pageSize)
+        return try await urlSession.load(endpoint)
+    }
+    
+    private func makeEndpointFrom(
+        network: Network,
+        address: Address,
+        page: Int?,
+        pageSize: Int?
+    ) throws -> Endpoint<Unmarshal.TokenTransactionsResponse> {
+        guard let url = URL(string: "https://stg-api.unmarshal.io/v1/\(network.name.lowercased())/address/\(address.address)/transactions") else { throw InvalidRequestError() }
+        var query = [
+            "auth_key": apiKey
         ]
         if let page = page {
-            parameters["page"] = String(page)
+            query["page"] = String(page)
         }
         if let pageSize = pageSize {
-            parameters["pageSize"] = String(pageSize)
+            query["pageSize"] = String(pageSize)
         }
-        
-        let req = AF.request(
-            "https://stg-api.unmarshal.io/v1/ethereum/address/\(address.address)/transactions",
-            method: .get,
-            parameters: parameters
+        return Endpoint(
+            json: .get,
+            url: url,
+            query: query
         )
-        
-        return try await withCheckedThrowingContinuation({ continuation in
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            req.responseDecodable(of: Unmarshal.TokenTransactionsResponse.self, decoder: decoder) { dataResponse in
-                switch dataResponse.result {
-                    case .success(let response):
-                        return continuation.resume(with: .success(response))
-                    case .failure(let error):
-                        print(error)
-                        return continuation.resume(throwing: error)
-                }
-            }
-        })
     }
-   
 }
