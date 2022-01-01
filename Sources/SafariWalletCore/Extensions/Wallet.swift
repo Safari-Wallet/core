@@ -16,10 +16,10 @@ extension Wallet {
         let mnemonic = mnemonicArray.joined(separator: " ")
         return (wallet, mnemonic)
     }
-    
-    public static func restoreHDWallet(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws -> Wallet {
+       
+    public convenience init(mnemonic: String, language: BIP39Wordlist = .english, network: Network = .ethereum) throws {
         guard let seed = try BIP39(mnemonic: mnemonic.components(separatedBy: " ")).seed() else { throw MEWwalletKit.WalletError.emptySeed }
-        return try Wallet(seed: seed, network: network)
+        try self.init(seed: seed, network: network)
     }
     
     public func fetchPrivateKeyFor(index: Int) async throws -> PK {
@@ -32,9 +32,9 @@ extension Wallet {
     ///   - network: Network for addresses to be generated (default is Ethereum)
     /// - Returns: Array of addresses
     /// - Throws: WalletError.addressGenerationError if an address couldn't be generated
-    public func generateAddresses(count: Int, network: Network = .ethereum) throws -> [Address] {
-        var addresses = [Address]()
-        for i in 0 ..< count {
+    public func generateAddresses(count: Int, startIndex: Int = 0, network: Network = .ethereum) throws -> [MEWwalletKit.Address] {
+        var addresses = [MEWwalletKit.Address]()
+        for i in startIndex ..< startIndex + count {
             guard let address = try self.derive(network, index: UInt32(i)).privateKey.address() else {
                 throw WalletCoreError.addressGenerationError
             }

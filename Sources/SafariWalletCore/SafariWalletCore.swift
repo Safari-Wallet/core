@@ -9,9 +9,9 @@ import MEWwalletKit
 
 public protocol SafariWalletCoreDelegate {
     func addresses() -> [String]?
-//    func account(account: String) -> Account?
+    func account(address: String, password: String?) async throws -> Account
     func client() -> EthereumClient?
-    func network() -> Network
+    func currentNetwork() -> Network
 }
 
 public class SafariWalletCore {

@@ -62,10 +62,10 @@ extension Wei {
     }
     
     // FIXME: If Gwei is a float, this returns nil
-    public init?(gwei: GWei) {
-        guard let amount = BigInt(gwei.description, radix: 10), let wei = BigInt(Wei.gWeiInWei.description, radix: 10) else { return nil }
-        self.value = amount * wei
-    }
+//    public init?(gwei: GWei) {
+//        guard let amount = BigInt(gwei.description, radix: 10), let wei = BigInt(Wei.gWeiInWei.description, radix: 10) else { return nil }
+//        self.value = amount * wei
+//    }
     
     public init?(ether: Ether) {
         guard let amount = BigInt(ether.description, radix: 10), let wei = BigInt(Wei.etherInWei.description, radix: 10) else { return nil }

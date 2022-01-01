@@ -10,14 +10,14 @@ import BigInt
 import MEWwalletKit
 
 public struct AlchemyTokenBalances: Equatable, Codable {
-    let address: Address
-    let tokenBalances: [AlchemyTokenBalance]
+    public let address: Address
+    public let tokenBalances: [AlchemyTokenBalance]
 }
 
 public struct AlchemyTokenBalance {
-    let contractAddress: Address
-    let tokenBalance: BigUInt?
-    let error: String? // Error?
+    public let contractAddress: Address
+    public let tokenBalance: BigUInt?
+    public let error: String? // Error?
 }
 
 extension AlchemyTokenBalance: Codable {
@@ -55,10 +55,10 @@ extension AlchemyTokenBalance: Equatable {
 
 /// https://docs.alchemy.com/alchemy/documentation/alchemy-web3/enhanced-web3-api#returns-2
 public struct AlchemyTokenMetadata: Codable {
-    let name: String
-    let symbol: String
-    let decimals: Int
-    let logo: URL?
+    public let name: String
+    public let symbol: String
+    public let decimals: Int
+    public let logo: URL?
 
     public static func == (lhs: AlchemyTokenMetadata, rhs: AlchemyTokenMetadata) -> Bool {
         return lhs.name == rhs.name && lhs.symbol == rhs.symbol && lhs.decimals == rhs.decimals
@@ -73,32 +73,32 @@ public enum AlchemyAssetTransferCategory: String, Codable {
 }
 
 public struct AlchemyRawContract: Codable {
-    let value: String?
-    let address: Address?
-    let decimal: String?
+    public let value: String?
+    public let address: Address?
+    public let decimal: String?
 }
 
 public struct AlchemyAssetTransfer: Codable {
-    let blockNum: Block
-    let hash: String
-    let from: Address
-    let to: Address
-    let value: Float
-    let erc721TokenId: String?
-    let asset: String
-    let category: AlchemyAssetTransferCategory?
-    let rawContract: AlchemyRawContract?
+    public let blockNum: Block
+    public let hash: String
+    public let from: Address
+    public let to: Address?
+    public let value: Float?
+    public let erc721TokenId: String?
+    public let asset: String?
+    public let category: AlchemyAssetTransferCategory?
+    public let rawContract: AlchemyRawContract?
 }
 
 public struct AlchemyAssetTransfers: Codable {
-    let transfers: [AlchemyAssetTransfer]
+    public let transfers: [AlchemyAssetTransfer]
 }
 
 public struct FeeHistoryResponse: Codable {
-    let oldestBlock: Block
-    let reward: [[String]] //[BigUInt]
-    let baseFeePerGas: [String] //[BigUInt]
-    let gasUsedRatio: [Float]
+    public let oldestBlock: Block
+    public let reward: [[String]] //[BigUInt]
+    public let baseFeePerGas: [String] //[BigUInt]
+    public let gasUsedRatio: [Float]
 }
 
 /*
