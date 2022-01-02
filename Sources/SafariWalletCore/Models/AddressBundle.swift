@@ -23,21 +23,22 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     
     public let network: Network // Supported: "Ropsten", "Ethereum", "Ethereum - Ledger Live"
     
+  
+//    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
+//        self.id = id
+//        self.walletName = walletName
+//        self.addresses = addresses
+//        self.type = type
+//        self.network = network
+//    }
+    
     /// Initialize new address bundle
     /// - Parameters:
     ///   - walletName: Human readable name (e.g. "Ledger 1 Wallet")
     ///   - type: Private key type (keystore, hardware, etc)
     ///   - network: Network (e.g. Ethereum or Ropston)
-    ///   - addresses: AddressItems
-    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
-        self.id = id
-        self.walletName = walletName
-        self.addresses = addresses
-        self.type = type
-        self.network = network
-    }
-    
-    public init(id: UUID, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
+    ///   - addresses: Addreses
+    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
         self.id = id
         self.type = type
         self.network = network
