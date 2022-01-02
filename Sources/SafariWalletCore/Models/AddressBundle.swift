@@ -40,6 +40,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     ///   - addresses: Addreses
     public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
         self.id = id
+        self.walletName = walletName
         self.type = type
         self.network = network
         self.addresses = []
