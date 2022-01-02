@@ -16,6 +16,9 @@ public final class ZerionClient {
     private let socketManager: SocketManager
     private let socketClient: SocketIOClient
     
+    private var connectContinuation: CheckedContinuation<(), Error>?
+    private var transactionContinuation: CheckedContinuation<Zerion.Response, Error>?
+    
     public init(apiKey: String) {
         self.apiKey = apiKey
         socketManager = SocketManager(
@@ -29,15 +32,25 @@ public final class ZerionClient {
             ]
         )
         socketClient = socketManager.socket(forNamespace: "/address")
+        listenForConnections()
+        listenForTransactions()
     }
     
-    private func connect() async throws {
-        return try await withCheckedThrowingContinuation({ continuation in
-            socketClient.connect()
-            socketClient.on(clientEvent: .connect) { data, ack in
-                continuation.resume(with: .success(()))
+    private func connectIfNeeded() async throws {
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard socketClient.status != .connected else {
+                return continuation.resume(with: .success(()))
             }
-        })
+            self?.connectContinuation = continuation
+            socketClient.connect()
+        }
+    }
+    
+    private func listenForConnections() {
+        socketClient.on(clientEvent: .connect) { [weak self] data, ack in
+            self?.connectContinuation?.resume(with: .success(()))
+            self?.connectContinuation = nil
+        }
     }
 }
 
@@ -54,40 +67,57 @@ extension ZerionClient {
     /// - Parameters:
     ///   - network: blockchain network.
     ///   - address: in hex string.
-    ///   - page: page number. optional
-    ///   - pageSize: number of records to be displayed per page. optional
+    ///   - offset: offset. default is 50. optional
+    ///   - limit: number of records to be displayed per page. optional
     /// - Returns: Returns an array transactions based on the address.
     public func getTransactions(network: Network = .ethereum,
                                 address: Address,
                                 currency: String = "usd", // TODO: Add currency enum
-                                page: Int? = nil,
-                                pageSize: Int? = nil) async throws -> [Zerion.Transaction] {
-        try await connect() // TODO: Check if we need to connect everytime when we fetch
+                                offset: Int? = nil,
+                                limit: Int? = nil) async throws -> Zerion.Response {
+        try await connectIfNeeded()
         
-        let items: [String : Any] = [
-            "scope": ["transactions"],
-            "payload": [
-                "address": address.address,
-                "currency": currency
-            ]
-        ]
-        
+        let items = makeQueryItems(address: address, currency: currency, offset: offset, limit: limit)
         socketClient.emit("get", items)
         
-        return try await withCheckedThrowingContinuation({ continuation in
-            socketClient.on("received address transactions") { data, ack in
-                do {
-                    let data = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    guard let value = try decoder.decode([Zerion.Response].self, from: data).first else {
-                        throw NoDataError()
-                    }
-                    continuation.resume(with: .success(value.payload.transactions))
-                } catch let error {
-                    continuation.resume(with: .failure(error))
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            self?.transactionContinuation = continuation
+        }
+    }
+    
+    private func listenForTransactions() {
+        socketClient.on("received address transactions") { data, ack in
+            do {
+                let data = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                guard let response = try decoder.decode([Zerion.Response].self, from: data).first else {
+                    throw NoDataError()
                 }
+                self.transactionContinuation?.resume(with: .success(response))
+            } catch let error {
+                self.transactionContinuation?.resume(with: .failure(error))
             }
-        })
+        }
+    }
+    
+    private func makeQueryItems(address: Address,
+                                currency: String,
+                                offset: Int?,
+                                limit: Int?) -> [String: Any] {
+        var items = [String: Any]()
+        var payload: [String: Any] = [
+            "address": address.address,
+            "currency": currency
+        ]
+        if let offset = offset {
+            payload["transactions_offset"] = offset
+        }
+        if let limit = limit {
+            payload["transactions_limit"] = limit
+        }
+        items["scope"] = ["transactions"]
+        items["payload"] = payload
+        return items
     }
 }

@@ -27,7 +27,7 @@ public enum Zerion {
     public struct Payload: Decodable {
         public let transactions: [Transaction]
     }
-
+    
     public struct Transaction: Decodable {
         public let txHash: String
         public let addressFrom: String
