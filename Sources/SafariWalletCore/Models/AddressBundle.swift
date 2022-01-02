@@ -23,31 +23,26 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     
     public let network: Network // Supported: "Ropsten", "Ethereum", "Ethereum - Ledger Live"
     
-  
-//    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
-//        self.id = id
-//        self.walletName = walletName
-//        self.addresses = addresses
-//        self.type = type
-//        self.network = network
-//    }
-    
     /// Initialize new address bundle
     /// - Parameters:
     ///   - walletName: Human readable name (e.g. "Ledger 1 Wallet")
     ///   - type: Private key type (keystore, hardware, etc)
     ///   - network: Network (e.g. Ethereum or Ropston)
     ///   - addresses: Addreses
-    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
+    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
         self.id = id
         self.walletName = walletName
+        self.addresses = addresses
         self.type = type
         self.network = network
-        self.addresses = []
+    }
+        
+    public convenience init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
+    
         let items = addresses.enumerated().map { (index, address) in
             AddressItem(address: address, derivationIndex: index, bundleUUID: id, accountName: nil)
         }
-        self.addresses = items
+        self.init(id: id, walletName: walletName, type: type, addresses: items)
     }
     
     public enum CodingKeys: CodingKey {
