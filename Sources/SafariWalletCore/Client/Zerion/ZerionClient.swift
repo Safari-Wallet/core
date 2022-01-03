@@ -42,6 +42,7 @@ public final class ZerionClient {
                 return continuation.resume(with: .success(()))
             }
             self?.connectContinuation = continuation
+            // TODO: add timeout
             socketClient.connect()
         }
     }
@@ -78,6 +79,7 @@ extension ZerionClient {
         try await connectIfNeeded()
         
         let items = makeQueryItems(address: address, currency: currency, offset: offset, limit: limit)
+        // TODO: add timeout
         socketClient.emit("get", items)
         
         return try await withCheckedThrowingContinuation { [weak self] continuation in
