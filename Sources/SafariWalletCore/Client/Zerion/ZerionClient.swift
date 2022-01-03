@@ -16,6 +16,7 @@ public final class ZerionClient {
     private let socketManager: SocketManager
     private let socketClient: SocketIOClient
     
+    private let timeout: Double = 10
     private var connectContinuation: CheckedContinuation<(), Error>?
     private var transactionContinuation: CheckedContinuation<Zerion.Response, Error>?
     
@@ -39,11 +40,14 @@ public final class ZerionClient {
     private func connectIfNeeded() async throws {
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard socketClient.status != .connected else {
-                return continuation.resume(with: .success(()))
+                continuation.resume(with: .success(()))
+                return
             }
             self?.connectContinuation = continuation
-            // TODO: add timeout
-            socketClient.connect()
+            socketClient.connect(timeoutAfter: timeout) {
+                continuation.resume(with: .failure(NoDataError()))
+                return
+            }
         }
     }
     
