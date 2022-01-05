@@ -11,22 +11,18 @@ let package = Package(
         .tvOS(.v15)
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "SafariWalletCore",
             targets: ["SafariWalletCore"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
         .package(name: "MEWwalletKit", url: "https://github.com/MyEtherWallet/mew-wallet-ios-kit", .upToNextMajor(from: "1.4.13")),
+        .package(name: "SocketIO", url: "https://github.com/socketio/socket.io-client-swift", .revision("a1ed825835a2d8c2555938e96557ccc05e4bebf3"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "SafariWalletCore",
-            dependencies: ["MEWwalletKit"]),
+            dependencies: ["MEWwalletKit", "SocketIO"]),
         .testTarget(
             name: "SafariWalletCoreTests",
             dependencies: ["SafariWalletCore", "MEWwalletKit"]),
