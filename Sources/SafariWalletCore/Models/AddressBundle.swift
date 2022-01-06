@@ -42,7 +42,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         let items = addresses.enumerated().map { (index, address) in
             AddressItem(address: address, derivationIndex: index, bundleUUID: id, accountName: nil)
         }
-        self.init(id: id, walletName: walletName, type: type, addresses: items)
+        self.init(id: id, walletName: walletName, type: type, network: network, addresses: items)
     }
     
     public enum CodingKeys: CodingKey {
