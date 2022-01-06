@@ -7,6 +7,7 @@
 
 import Foundation
 import os.log
+import MEWwalletKit
 
 // Implementation of https://docs.metamask.io/guide/ethereum-provider.html and https://docs.metamask.io/guide/rpc-api.html
 public struct ProviderAPI {
@@ -21,7 +22,7 @@ public struct ProviderAPI {
     public func parseMessage(method: String, params: Any?) async throws -> Any {
 
         guard let client = delegate.client() else {
-            logger.critical("Safari-wallet SafariWebExtensionHandler: No delegate client")
+            logger.critical("ProviderAPI SafariWebExtensionHandler: No delegate client")
             throw WalletCoreError.noClient
         }
         
@@ -58,14 +59,14 @@ public struct ProviderAPI {
             return client.isConnected
         
         case "request":
-            throw WalletCoreError.notImplemented
+            throw WalletCoreError.notImplemented("request")
             
         // MARK: - JSONRPC API
         case "eth_accounts", "eth_requestAccounts", "eth_getAccounts":
             if let address = delegate.addresses()?.first {
-                logger.critical("Safari-wallet SafariWebExtensionHandler: fetching accounts: \(address)")
+                logger.critical("ProviderAPI SafariWebExtensionHandler: fetching accounts: \(address, privacy: .public)")
             } else {
-                logger.critical("Safari-wallet SafariWebExtensionHandler: adresses returned nil")
+                logger.critical("ProviderAPI SafariWebExtensionHandler: adresses returned nil")
             }
             
             // https://eth.wiki/json-rpc/API#eth_accounts
@@ -74,23 +75,24 @@ public struct ProviderAPI {
             
         // Uncomment one of the eth_call cases to test
             
-        case "eth_call":
-            // V1. This version expects a complete JSON-RPC object to be passed as the params value, like: {"jsonrpc":"2.0","method":"eth_call","params":[<call>, "latest"],"id":1}
-            // Returns mock Data
-            guard let params = params  else { throw WalletCoreError.noParameters }
-            let data = try JSONSerialization.data(withJSONObject: params)
-            return try await client.ethCallMock(data: data)
-        
+//        case "eth_call":
+//            // V1. This version expects a complete JSON-RPC object to be passed as the params value, like: {"jsonrpc":"2.0","method":"eth_call","params":[<call>, "latest"],"id":1}
+//            // Returns mock Data
+//            guard let params = params  else { throw WalletCoreError.noParameters }
+//            let data = try JSONSerialization.data(withJSONObject: params)
+//            return try await client.ethCallMock(data: data)
+//
 //        case "eth_call":
 //            // V2. Same as above, but returns real data from Alchemy (account needs to be funded to call!)
 //            guard let params, let data = try JSONSerialization.data(withJSONObject: params) = params else { throw WalletCoreError.noParameters }
 //            return try await client.ethCall(data: data)
             
-//        case "eth_call":
-//            // V3. Same as V1 but returns a string
-//            guard let params, let data = try JSONSerialization.data(withJSONObject: params) = params else { throw WalletCoreError.noParameters }
-//            let result = try await client.ethCallMock(data: data)
-//            return String(data: result, encoding: .utf8) ?? "Error encoding result"
+        case "eth_call":
+            // V3. Same as V1 but returns a string
+            guard let params = params else { throw WalletCoreError.noParameters }
+            let data = try JSONSerialization.data(withJSONObject: params)
+            let result = try await client.ethCallMock(data: data)
+            return String(data: result, encoding: .utf8) ?? "Error encoding result"
             
         /* Ignore this code.
             // This version expects ...
@@ -124,9 +126,20 @@ public struct ProviderAPI {
             
         case "eth_sign":
             // https://eth.wiki/json-rpc/API#eth_sign
-            // FIXME: Returns mock result
-            return "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
-            
+            guard let params = params as? [String], params.count >= 2 else {
+                throw WalletCoreError.invalidParams
+            }
+            let address = params[0]
+            let message = params[1]
+            let password: String?
+            if params.count >= 3 {
+                password = params[2]
+            } else {
+                password = nil
+            }
+            let account = try await delegate.account(address: address, password: password)
+            return try account.sign(hexString: message)
+                        
         default:
             throw WalletCoreError.unknownMethod(method)
         }

@@ -52,7 +52,7 @@ public class EthereumClient: BaseClient {
     public func ethCallMock(call: Call, blockNumber: Block = .latest) async throws -> Data {
         let params = CallWrapper(call: call, block: blockNumber)
 //        return try await jsonRpcClient.makeRequest(method: "eth_call", params: params)
-        return "{\"id\":1,\"jsonrpc\": \"2.0\",\"result\": \"0x\"}".data(using: .utf8)!
+        return "{\"id\":1,\"jsonrpc\": \"2.0\",\"result\": \"0x1\"}".data(using: .utf8)!
     }
 
     public func ethCall(data: Data) async throws -> Data {
@@ -60,7 +60,7 @@ public class EthereumClient: BaseClient {
     }
     
     public func ethCallMock(data: Data) async throws -> Data {
-        return "{\"id\":1,\"jsonrpc\": \"2.0\",\"result\": \"0x\"}".data(using: .utf8)!
+        return "{\"id\":1,\"jsonrpc\": \"2.0\",\"result\": \"0x1\"}".data(using: .utf8)!
     }
  
     public func ethCall2(call: Call, blockNumber: Block = .latest) async throws -> String? {

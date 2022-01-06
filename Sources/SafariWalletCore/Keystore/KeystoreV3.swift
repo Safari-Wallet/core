@@ -20,12 +20,12 @@ public class KeystoreV3 {
     public var keystoreParams: KeystoreParamsV3?
         
     ///
-    public required init? (privateKey: Data, passwordData: Data) async throws {
+    public required init (privateKey: Data, passwordData: Data) async throws {
         self.keystoreParams = try await encryptDataToStorage(passwordData, data: privateKey)
     }
     
     ///
-    public required init? (keystore: Data) throws {
+    public required init (keystore: Data) throws {
         self.keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keystore)
     }
 
