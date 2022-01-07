@@ -49,6 +49,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         case id
         case walletName
         case addresses
+        case defaultAddressIndex
         case type
         case network
     }
@@ -58,6 +59,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         id = try container.decode(UUID.self, forKey: .id)
         walletName = try container.decode(String.self, forKey: .walletName)
         addresses = try container.decode([AddressItem].self, forKey: .addresses)
+        defaultAddressIndex = try container.decode(Int.self, forKey: .defaultAddressIndex)
         type = try container.decode(PrivateKeyType.self, forKey: .type)
         network = try container.decode(Network.self, forKey: .network)
     }
@@ -67,6 +69,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         try container.encode(id, forKey: .id)
         try container.encode(walletName, forKey: .walletName)
         try container.encode(addresses, forKey: .addresses)
+        try container.encode(defaultAddressIndex, forKey: .defaultAddressIndex)
         try container.encode(type, forKey: .type)
         try container.encode(network, forKey: .network)
     }
