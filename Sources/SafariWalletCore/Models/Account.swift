@@ -10,7 +10,7 @@ import MEWwalletKit
 
 public struct Account {
     
-    public let addresss: Address
+    public let address: Address
     public let publicKey: PublicKeyEth1
     private let privateKey: PrivateKeyEth1
     public let wallet: String
@@ -20,7 +20,7 @@ public struct Account {
         self.privateKey = privateKey
         self.publicKey = try privateKey.publicKey()
         guard let address = privateKey.address() else { throw WalletCoreError.addressGenerationError }
-        self.addresss = address
+        self.address = address
         self.wallet = wallet
         self.derivationpath = derivationpath
     }
@@ -33,6 +33,18 @@ public struct Account {
             throw WalletCoreError.signingError
         }
         return signedMessage
+    }
+    
+    public func signTypedMessage(payload: TypedMessage, version: SignTypedDataVersion = .v3) throws -> String {
+        do {
+            return try MEWwalletKit.signTypedMessage(
+                privateKey: privateKey,
+                payload: SignedMessagePayload.init(data: payload, signature: nil),
+                version: version
+            ).addHexPrefix()
+        } catch {
+            throw WalletCoreError.signingError
+        }
     }
     
 //    public init(address: Address, path: String, network: Network, mnemonic: String)

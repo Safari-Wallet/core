@@ -119,6 +119,18 @@ public struct ProviderAPI {
             let result = try await client.ethGetBalance(address: params[0], blockNumber: Block(rawValue: params[1]))
             return result.hexString
             
+        case "eth_signTypedData_v3", "eth_signTypedData_v4":
+            guard let params = params as? [String], params.count == 2 else {
+                throw WalletCoreError.invalidParams
+            }
+            let account = try await delegate.account(address: params[0], password: "password123") // FIXME: password
+            guard let json = params[1].toJSON() as? [String : Any] else {
+                throw WalletCoreError.invalidParams
+            }
+            return try account.signTypedMessage(
+                payload: .init(json: json),
+                version: method == "eth_signTypedData_v4" ? .v4 : .v3
+            )
         case "eth_sendTransaction":
             // https://eth.wiki/json-rpc/API#eth_sendtransaction
             // FIXME: Returns mock result
