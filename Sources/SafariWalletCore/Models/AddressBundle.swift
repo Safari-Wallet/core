@@ -13,7 +13,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     public var id: UUID
     
     /// Human readable, end-user defined name
-    @Published public var walletName: String?
+    @Published public var walletName: String
     
     @Published public private (set) var addresses: [AddressItem]
     
@@ -29,7 +29,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     ///   - type: Private key type (keystore, hardware, etc)
     ///   - network: Network (e.g. Ethereum or Ropston)
     ///   - addresses: Addreses
-    public init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
+    public init(id: UUID, walletName: String, type: PrivateKeyType, network: Network = .ethereum, addresses: [AddressItem]) {
         self.id = id
         self.walletName = walletName
         self.addresses = addresses
@@ -37,7 +37,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         self.network = network
     }
         
-    public convenience init(id: UUID, walletName: String? = nil, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
+    public convenience init(id: UUID, walletName: String, type: PrivateKeyType, network: Network = .ethereum, addresses: [MEWwalletKit.Address]) {
     
         let items = addresses.enumerated().map { (index, address) in
             AddressItem(address: address, derivationIndex: index, bundleUUID: id, accountName: nil)
@@ -49,6 +49,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         case id
         case walletName
         case addresses
+        case defaultAddressIndex
         case type
         case network
     }
@@ -56,8 +57,9 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        walletName = try container.decode(String?.self, forKey: .walletName)
+        walletName = try container.decode(String.self, forKey: .walletName)
         addresses = try container.decode([AddressItem].self, forKey: .addresses)
+        defaultAddressIndex = try container.decode(Int.self, forKey: .defaultAddressIndex)
         type = try container.decode(PrivateKeyType.self, forKey: .type)
         network = try container.decode(Network.self, forKey: .network)
     }
@@ -67,6 +69,7 @@ public class AddressBundle: Identifiable, ObservableObject, Codable {
         try container.encode(id, forKey: .id)
         try container.encode(walletName, forKey: .walletName)
         try container.encode(addresses, forKey: .addresses)
+        try container.encode(defaultAddressIndex, forKey: .defaultAddressIndex)
         try container.encode(type, forKey: .type)
         try container.encode(network, forKey: .network)
     }
