@@ -26,6 +26,14 @@ public struct Account {
     }
     
     public func sign(hexString: String) throws -> String {
+        let data = Data(hex: hexString)
+        guard let signedMessage = data.sign(key: privateKey, leadingV: false)?.toHexString().addHexPrefix() else {
+            throw WalletCoreError.signingError
+        }
+        return signedMessage
+    }
+    
+    public func personalSign(hexString: String) throws -> String {
         guard let data = Data(hex: hexString).hashPersonalMessage() else {
             throw WalletCoreError.invalidHexString(hexString)
         }

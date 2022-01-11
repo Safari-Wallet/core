@@ -131,10 +131,6 @@ public struct ProviderAPI {
                 payload: .init(json: json),
                 version: method == "eth_signTypedData_v4" ? .v4 : .v3
             )
-        case "eth_sendTransaction":
-            // https://eth.wiki/json-rpc/API#eth_sendtransaction
-            // FIXME: Returns mock result
-            return "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"
             
         case "eth_sign":
             // https://eth.wiki/json-rpc/API#eth_sign
@@ -143,15 +139,23 @@ public struct ProviderAPI {
             }
             let address = params[0]
             let message = params[1]
-            let password: String?
-            if params.count >= 3 {
-                password = params[2]
-            } else {
-                password = nil
-            }
-            let account = try await delegate.account(address: address, password: password)
+            let account = try await delegate.account(address: address, password: "password123") // FIXME: password
             return try account.sign(hexString: message)
-                        
+
+        case "personal_sign":
+            guard let params = params as? [String], params.count >= 2 else {
+                throw WalletCoreError.invalidParams
+            }
+            let address = params[0]
+            let message = params[1]
+            let account = try await delegate.account(address: address, password: "password123") // FIXME: password
+            return try account.personalSign(hexString: message)
+
+        case "eth_sendTransaction":
+            // https://eth.wiki/json-rpc/API#eth_sendtransaction
+            // FIXME: Returns mock result
+            return "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331"
+
         default:
             throw WalletCoreError.unknownMethod(method)
         }
