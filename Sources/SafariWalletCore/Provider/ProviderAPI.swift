@@ -19,6 +19,8 @@ public struct ProviderAPI {
         self.delegate = delegate
     }
     
+    parseMessage (method: params: ?) -> concrete Params object {}
+    
     public func parseMessage(method: String, params: Any?) async throws -> Any {
 
         guard let client = delegate.client() else {
@@ -137,8 +139,10 @@ public struct ProviderAPI {
             } else {
                 password = nil
             }
-            let account = try await delegate.account(address: address, password: password)
-            return try account.sign(hexString: message)
+            assertionFailure() // TODO: FIXME
+//            let account = try await delegate.account(address: address, password: password)
+//            return try account.sign(hexString: message)
+            return Data()
                         
         default:
             throw WalletCoreError.unknownMethod(method)

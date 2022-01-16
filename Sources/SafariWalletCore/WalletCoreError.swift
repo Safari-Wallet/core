@@ -20,6 +20,7 @@ public enum WalletCoreError: Error {
     case decodingError
     case signingError
     case invalidHexString(String)
+    case incompatibleClient
 }
 
 extension WalletCoreError: LocalizedError {
@@ -51,6 +52,8 @@ extension WalletCoreError: LocalizedError {
             return "Singing error"
         case .invalidHexString(let string):
             return "Expected hex string: \(string)"
+        case .incompatibleClient:
+            return "Incompatible client"
         }
     }
 

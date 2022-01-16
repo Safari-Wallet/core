@@ -9,7 +9,8 @@ import Foundation
 import MEWwalletKit
 import BigInt
 
-// https://dashboard.alchemyapi.io/composer
+/// Client for Alchemy, subclassed from EthereumClient
+/// For interactive tests: https://dashboard.alchemyapi.io/composer
 public final class AlchemyClient: EthereumClient {
     
     /// The number of times the client will attempt to resend a rate limited request before giving up. Default: 3.

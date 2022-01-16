@@ -22,7 +22,7 @@ extension Wallet {
         try self.init(seed: seed, network: network)
     }
     
-    public func fetchPrivateKeyFor(index: Int) async throws -> PK {
+    public func privateKeyFor(index: Int) async throws -> PK {
         return try self.derive(self.privateKey.network, index: UInt32(index)).privateKey
     }
     
