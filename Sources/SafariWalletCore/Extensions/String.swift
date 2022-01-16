@@ -22,11 +22,8 @@ extension String {
     public func addHexPrefix() -> String {
         return hexPrefix.appending(self)
     }
-    
-    public func toHexString() -> String {
-        guard let data = data(using: .utf8) else {
-            return ""
-        }
-        return data.toHexString()
+        
+    public func toHexString(uppercase: Bool = false, prefix: String? = nil) -> String {
+        return unicodeScalars.map { prefix ?? "" + .init($0.value, radix: 16, uppercase: uppercase) }.joined()
     }
 }
