@@ -34,10 +34,6 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
         self.mewAddress = address
         self.derivationIndex = derivationIndex
     }
-    
-    public func fetchENSname() async {
-        // TODO: add ENS support
-    }
 
     // MARK: - Codable
     
@@ -72,5 +68,11 @@ public class AddressItem: Codable, Identifiable, ObservableObject {
     }    
 }
 
-
-
+public extension AddressItem {
+    
+    func fetchENSname(network: Network, provider: NodeProvider) async throws {
+        let ensResolver = ENSResolver(network: network, provider: provider)
+        let ensName = try await ensResolver.resolve(address: addressString)
+        self.ensName = ensName
+    }
+}
