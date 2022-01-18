@@ -113,10 +113,14 @@ public struct ProviderAPI {
 
         case "eth_getBalance":
             // https://eth.wiki/json-rpc/API#eth_getbalance
-            guard let params = params as? [String], params.count == 2 else {
+            guard let params = params as? [String], params.count > 0, params.count < 3 else {
                 throw WalletCoreError.invalidParams
             }
-            let result = try await client.ethGetBalance(address: params[0], blockNumber: Block(rawValue: params[1]))
+            if params.count == 2 {
+                let result = try await client.ethGetBalance(address: params[0], blockNumber: Block(rawValue: params[1]))
+            } else {
+                let result = try await client.ethGetBalance(address: params[0], blockNumber: Block(rawValue: "latest"))
+            }
             return result.hexString
             
         case "eth_sendTransaction":
@@ -126,7 +130,7 @@ public struct ProviderAPI {
             
         case "eth_sign":
             // https://eth.wiki/json-rpc/API#eth_sign
-            guard let params = params as? [String], params.count >= 2 else {
+            guard let params = params as? [String], params.count == 2 else {
                 throw WalletCoreError.invalidParams
             }
             let address = params[0]
