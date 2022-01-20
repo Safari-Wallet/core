@@ -20,7 +20,7 @@ public struct Wei {
     private (set) var value: BigInt
     
     public var hexString: String {
-        value.description.toHexString().addHexPrefix()
+        return String(value, radix: 16).addHexPrefix()
     }
 
     // MARK: - Conversions
