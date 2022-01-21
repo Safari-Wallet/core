@@ -12,6 +12,12 @@ import BigInt
 /// Client for Ethereum
 /// For interactive tests: https://dashboard.alchemyapi.io/composer
 public class EthereumClient: BaseClient {
+    
+    public enum NetworkError: Error {
+        case decodingError
+        case encodingError
+        case unknown
+    }
    
     public override init?(network: Network = .ethereum, provider: NodeProvider) {
       super.init(network: network, provider: provider)
@@ -97,8 +103,17 @@ public class EthereumClient: BaseClient {
 // MARK: - Mock calls
 extension EthereumClient {
     
+    public func ethCall<T: Decodable>(call: Call, blockNumber: Block = .latest) async throws -> T {
+        let response = try await ethCall(call: call, blockNumber: blockNumber)
+        let decoder = JSONDecoder()
+        guard let decodedResponse = try decoder.decode(JsonRpcResponse<T>.self, from: response).result else {
+            throw NetworkError.decodingError
+        }
+        return decodedResponse
+    }
+    
     public func ethCallMock(call: Call, blockNumber: Block = .latest) async throws -> Data {
-        let params = CallWrapper(call: call, block: blockNumber)
+//        let params = CallWrapper(call: call, block: blockNumber)
 //        return try await jsonRpcClient.makeRequest(method: "eth_call", params: params)
         return "{\"id\":1,\"jsonrpc\": \"2.0\",\"result\": \"0x1\"}".data(using: .utf8)!
     }
