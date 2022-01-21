@@ -8,13 +8,30 @@
 import Foundation
 import MEWwalletKit
 
-public struct Call: Codable {    
-    let from: Address?
-    let to: Address
-    let gas: Int? // BigInt?
-    let gasPrice: Wei?
-    let value: Wei?
-    let data: String?
+public struct Call: Codable {
+    public let from: Address?
+    public let to: Address
+    public let gas: Int? // BigInt?
+    public let gasPrice: Wei?
+    public let value: Wei?
+    public let data: String?
+    
+    public init(
+        from: Address? = nil,
+        to: Address,
+        gas: Int? = nil,
+        gasPrice: Wei? = nil,
+        value: Wei? = nil,
+        data: String? = nil
+    ) {
+        self.from = from
+        self.to = to
+        self.gas = gas
+        self.gasPrice = gasPrice
+        self.value = value
+        self.data = data
+    }
+    
 }
 
 public struct CallWrapper: Codable {

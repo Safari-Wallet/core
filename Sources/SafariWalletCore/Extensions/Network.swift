@@ -112,3 +112,10 @@ extension Network: Codable {
         try container.encode(self.name.lowercased())
     }
 }
+
+extension Network: Equatable {
+    
+    public static func == (lhs: Network, rhs: Network) -> Bool {
+        lhs.name == rhs.name
+    }
+}

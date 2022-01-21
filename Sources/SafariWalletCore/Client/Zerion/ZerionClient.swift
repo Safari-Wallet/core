@@ -46,6 +46,7 @@ public final class ZerionClient {
             self?.connectContinuation = continuation
             socketClient.connect(timeoutAfter: timeout) {
                 continuation.resume(with: .failure(NoDataError()))
+                self?.connectContinuation = nil
                 return
             }
         }
