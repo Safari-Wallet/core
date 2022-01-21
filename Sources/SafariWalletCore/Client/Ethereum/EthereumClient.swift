@@ -82,6 +82,14 @@ public class EthereumClient: BaseClient {
         return try await jsonRpcClient.makeRequest(method: "eth_sendRawTransaction", params: [data.toHexString().addHexPrefix()], resultType: String.self)
     }
     
+    public func ethGetCode(address: Address, blockNumber: Block = .latest) async throws -> String {
+        return try await jsonRpcClient.makeRequest(method: "eth_getCode", params: [address.address, blockNumber.stringValue], resultType: String.self)
+        
+//        jsonRpcClient.makeRequest(method: "eth_getCode", params: [address.address, blockNumber], resultType: String.self)
+//        guard let string = String(data: data, encoding: .utf8) else { throw WalletCoreError.decodingError }
+//        return string
+    }
+    
     /// https://eth.wiki/json-rpc/API#eth_call
     /// - Parameter params: <#params description#>
     /// - Returns: <#description#>

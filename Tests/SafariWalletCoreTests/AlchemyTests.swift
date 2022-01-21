@@ -58,4 +58,18 @@ class AlchemyTests: XCTestCase {
         let fee = try await mainnetClient.maxPriorityFeePerGas()
         XCTAssertGreaterThan(fee, 0)
     }
+    
+    func testGetCodeContract() async throws {
+        let code = try await mainnetClient.ethGetCode(address: Address(raw: "0xa39C4F2E6F99e334030220FB9c2945E7C9d07142")) // safariwallet.eth
+        print(code)
+        XCTAssertNotEqual(code, "0x")
+    }
+    
+    func testGetCodeAccount() async throws {
+        let code = try await mainnetClient.ethGetCode(address: Address(raw: "0x0f5fdd0a1490959ef3cf09c7150dc73f3929843f")) // ronaldmannak.eth
+        print(code)
+        XCTAssertEqual(code, "0x")
+        
+    }
+    
 }

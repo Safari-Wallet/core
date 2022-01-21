@@ -19,8 +19,6 @@ public struct ProviderAPI {
         self.delegate = delegate
     }
     
-    parseMessage (method: params: ?) -> concrete Params object {}
-    
     public func parseMessage(method: String, params: Any?) async throws -> Any {
 
         guard let client = delegate.client() else {
