@@ -26,4 +26,9 @@ extension String {
     public func toHexString(uppercase: Bool = false, prefix: String? = nil) -> String {
         return unicodeScalars.map { prefix ?? "" + .init($0.value, radix: 16, uppercase: uppercase) }.joined()
     }
+
+    public func toJSON() -> Any? {
+        guard let data = self.data(using: .utf8, allowLossyConversion: false) else { return nil }
+        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+    }
 }
